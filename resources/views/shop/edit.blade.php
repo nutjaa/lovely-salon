@@ -28,7 +28,7 @@
 				<div class="form-actions fluid">
           <div class="row">
             <div class="col-md-offset-3 col-md-9">
-              <button class="btn green" type="submit">Submit</button>
+              <button class="btn green" type="submit">Save</button>
               <a class="btn default" href="{{ url('') }}">Cancel</a>
             </div>
           </div>

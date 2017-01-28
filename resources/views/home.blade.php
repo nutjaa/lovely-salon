@@ -36,7 +36,7 @@
             <div class="col-sm-4">
                 <div class="blog-post-sm bordered blog-container">
                     <div class="blog-img-thumb">
-                        <a href="javascript:;">
+                        <a href="{{ url($company_user->company->url) }}">
                             <img src="/assets/images/02.jpg">
                         </a>
                     </div>

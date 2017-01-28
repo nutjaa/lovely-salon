@@ -11,6 +11,6 @@
 <script src="/assets/global/scripts/app.min.js" type="text/javascript"></script>
 <!-- END THEME GLOBAL SCRIPTS -->
 <!-- BEGIN THEME LAYOUT SCRIPTS -->
-<script src="../assets/layouts/layout6/scripts/layout.min.js" type="text/javascript"></script>
-<script src="../assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
+<script src="/assets/layouts/layout6/scripts/layout.min.js" type="text/javascript"></script>
+<script src="/assets/layouts/global/scripts/quick-sidebar.min.js" type="text/javascript"></script>
 <!-- END THEME LAYOUT SCRIPTS -->

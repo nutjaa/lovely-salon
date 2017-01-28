@@ -22,7 +22,7 @@
 
     <!-- BEGIN THEME GLOBAL STYLES -->
     <link href="/assets/global/css/components-md.min.css" rel="stylesheet" id="style_components" type="text/css" />
-    <link href="../assets/global/css/plugins-md.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assets/global/css/plugins-md.min.css" rel="stylesheet" type="text/css" />
     <!-- END THEME GLOBAL STYLES -->
     <!-- BEGIN THEME LAYOUT STYLES -->
     <link href="/assets/layouts/layout6/css/layout.min.css" rel="stylesheet" type="text/css" />
@@ -63,9 +63,19 @@
               </div>
 
             </div>
+
+
+            @section('page-sidebar')
+            @show
+
+
             <div class="page-fixed-main-content">
+
+
+
                 @if (session('status'))
-                    <div class="alert alert-success">
+                    <div class="alert alert-success alert-dismissable">
+                        <button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
                         {{ session('status') }}
                     </div>
                 @endif

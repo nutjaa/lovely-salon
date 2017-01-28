@@ -4,7 +4,7 @@
         <div class="container-fluid">
             <div class="havbar-header">
                 <!-- BEGIN LOGO -->
-                <a id="index" class="navbar-brand" href="start.html">
+                <a id="index" class="navbar-brand" href="/">
                     <img src="/assets/layouts/layout6/img/logo.png" alt="Logo"> </a>
                 <!-- END LOGO -->
                 <!-- BEGIN TOPBAR ACTIONS -->
@@ -69,7 +69,7 @@
                     <!-- BEGIN USER PROFILE -->
                     <div class="btn-group-img btn-group">
                         <button type="button" class="btn btn-sm dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            <img src="../assets/layouts/layout6/img/avatar1.jpg" alt=""> </button>
+                            <img src="/assets/layouts/layout6/img/avatar1.jpg" alt=""> </button>
                         <ul class="dropdown-menu-v2" role="menu">
                             <li>
                                 <a href="page_user_profile_1.html">

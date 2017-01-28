@@ -1,9 +1,8 @@
 @if (count($errors) > 0)
-  <div class="alert alert-danger">
-    <ul>
+  <div class="alert alert-danger fade in">
+  	<button class="close" aria-hidden="true" data-dismiss="alert" type="button"></button>
       @foreach ($errors->all() as $error)
-          <li>{{ $error }}</li>
+        <p><i class="fa-lg fa fa-warning"></i>{{ $error }}</p>
       @endforeach
-    </ul>
   </div>
 @endif
