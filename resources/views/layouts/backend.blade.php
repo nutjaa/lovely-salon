@@ -29,25 +29,53 @@
     <link href="/assets/layouts/layout6/css/custom.min.css" rel="stylesheet" type="text/css" />
     <!-- END THEME LAYOUT STYLES -->
 
+    @section('page-level-styles')
+    @show
+
     <body class="page-md">
     	@include('shared.header')
 
+
     	<!-- BEGIN CONTAINER -->
         <div class="container-fluid">
+
           <div class="page-content page-content-popup">
+
             <div class="page-content-fixed-header">
               <!-- BEGIN BREADCRUMBS -->
               <ul class="page-breadcrumb">
-                <li>
-                  <a href="#">Dashboard</a>
-                </li>
-                <li>Dashboard</li>
+                @section('breadcrumbs')
+                @show
               </ul>
+
+              <div class="content-header-menu">
+                @section('header-menu')
+                @show
+                <!-- BEGIN MENU TOGGLER -->
+                <button type="button" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="toggle-icon">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </span>
+                </button>
+                <!-- END MENU TOGGLER -->
+              </div>
+
             </div>
+            <div class="page-fixed-main-content">
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+                @yield('content')
+            </div>
+            <p class="copyright-v2">2017 © Lovely salon.
+            </p>
           </div>
         </div>
       <!-- END CONTAINER -->
-
 
     	<!--[if lt IE 9]>
 			<script src="/assets/global/plugins/respond.min.js"></script>

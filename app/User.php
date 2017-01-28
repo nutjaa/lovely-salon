@@ -26,4 +26,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function last_visit_company(){
+        return $this->belongsTo('App\Company' , 'last_visit_company_id');
+    }
+
+    public function company_users(){
+        return $this->hasMany('App\CompanyUser' , 'user_id');
+    }
 }

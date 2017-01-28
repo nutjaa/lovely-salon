@@ -11,7 +11,13 @@
 |
 */
 
+Route::group(['middleware' => ['auth']], function () {
+	Route::resource('shops', 'CompanyController');
+
+});
+
 Route::get('/', 'HomeController@index');
+
 
 Auth::routes();
 Route::get('/logout', 'Auth\LoginController@logout');
