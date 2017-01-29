@@ -38,6 +38,21 @@
                 </li>
             </ul>
         </li>
+        <li class="nav-item start ">
+            <a href="javascript:;" class="nav-link nav-toggle">
+                <i class="icon-settings"></i>
+                <span class="title">System</span>
+                <span class="arrow"></span>
+            </a>
+            <ul class="sub-menu">
+                <li class="nav-item start ">
+                    <a href="{{ url($shop_url . '/options') }}" class="nav-link ">
+                        <i class="icon-settings"></i>
+                        <span class="title">Options</span>
+                    </a>
+                </li>
+            </ul>
+        </li>
       </ul>
 	 </div>
 </div>

@@ -21,6 +21,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::group([ 'prefix' => '{shop_url}' ], function () {
 		Route::get('/', 'Shop\DashboardController@index');
 		Route::resource('employees', 'Shop\EmployeeController');
+		Route::resource('options', 'Shop\OptionController');
 	});
 });
 
