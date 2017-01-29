@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 
 use App\Employee ;
 use App\Company ;
+use App\Option ;
 
 class EmployeeController extends Controller{
 	public function index(Request $request , $shop_url){
@@ -15,7 +16,8 @@ class EmployeeController extends Controller{
 
 	public function create($shop_url){
 		$employee = new Employee() ;
-   	return view('shop.employee.edit')->with('shop_url',$shop_url)->with('employee',$employee);
+    $tasks = Option::byOptionType('task')->get() ;
+   	return view('shop.employee.edit')->with('shop_url',$shop_url)->with('employee',$employee)->with('tasks',$tasks);
   }
 
   public function store(Request $request , $shop_url){
@@ -40,16 +42,20 @@ class EmployeeController extends Controller{
 
   public function edit(Request $request , $shop_url , $id){
   	$employee = Employee::findOrFail($id);
-  	return view('shop.employee.edit')->with('shop_url',$shop_url)->with('employee',$employee);
+    $tasks = Option::byOptionType('task')->get() ;
+  	return view('shop.employee.edit')->with('shop_url',$shop_url)->with('employee',$employee)->with('tasks',$tasks);
   }
 
   public function update(Request $request , $shop_url , $id){
   	$employee = Employee::findOrFail($id);
 
+    $tasks = $request->input('tasks');
+
   	$employee->name = $request->input('name');
   	$employee->description = $request->input('description');
   	$employee->position = $request->input('position');
   	$employee->base_salary = $request->input('base_salary');
+    $employee->tasks = $tasks ;
   	$employee->save();
 
   	return redirect($shop_url.'/employees')->with('status', 'Success update employee - ' . $employee->name );

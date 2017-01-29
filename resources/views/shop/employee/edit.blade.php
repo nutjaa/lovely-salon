@@ -63,6 +63,20 @@
                 <input type="number" placeholder="" name="base_salary" class="form-control" value="{!! $employee->base_salary !!}">
               </div>
           </div>
+          <div class="form-group">
+             <label class="col-md-2 control-label">Tasks:<span class="required"> * </span></label>
+              <div class="col-md-10">
+                <div class="form-control height-auto">
+                  <div class="scroller" style="height:275px;" data-always-visible="1">
+                    <ul class="list-unstyled">
+                      @foreach($tasks as $task)
+                      <li><label><input type="checkbox" name="tasks[]" value="{!! $task->id !!}" @if($employee->hasTask($task->id)) checked="checked" @endif>&nbsp;&nbsp;{!! $task->name !!}</label>
+                      @endforeach
+                    </ul>
+                  </div>
+                </div>
+              </div>
+          </div>
 				</div>
 				<div class="form-actions fluid">
           <div class="row">

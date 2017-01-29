@@ -9,7 +9,7 @@ class Option extends Model
 	/***** RELATION ***/
 
 	/***** SCOPE *****/
-	public function scopeOptionType($query,$option_type){
+	public function scopeByOptionType($query,$option_type){
 		return $query->where('option_type',$option_type);
 	}
 
