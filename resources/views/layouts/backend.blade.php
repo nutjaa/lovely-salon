@@ -94,6 +94,9 @@
 
 			<!-- BEGIN CORE PLUGINS -->
 			@include('shared.core_plugins')
+
+            @section('page-level-js')
+            @show
       <!-- END CORE PLUGINS -->
     </body>
 </html>

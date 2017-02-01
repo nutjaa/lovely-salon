@@ -22,6 +22,7 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::get('/', 'Shop\DashboardController@index');
 		Route::resource('employees', 'Shop\EmployeeController');
 		Route::resource('options', 'Shop\OptionController');
+		Route::resource('daily-jobs','Shop\DailyJobController');
 	});
 });
 

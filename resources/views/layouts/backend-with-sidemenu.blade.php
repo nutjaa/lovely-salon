@@ -20,17 +20,24 @@
                 </li>
             </ul>
         </li>
+        <li class="nav-item start ">
+            <a href="{{ url($shop_url . '/daily-jobs') }}" class="nav-link ">
+                <i class="icon-notebook"></i>
+                <span class="title">Daily Tasks</span>
+                <span class="arrow"></span>
+            </a>
+        </li>
         <li class="heading">
             <h3 class="uppercase">Settings</h3>
         </li>
-        <li class="nav-item start ">
+        <li class="nav-item ">
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-settings"></i>
                 <span class="title">Shop</span>
                 <span class="arrow"></span>
             </a>
             <ul class="sub-menu">
-                <li class="nav-item start ">
+                <li class="nav-item  ">
                     <a href="{{ url($shop_url . '/employees') }}" class="nav-link ">
                         <i class="icon-settings"></i>
                         <span class="title">Employees</span>
@@ -38,14 +45,14 @@
                 </li>
             </ul>
         </li>
-        <li class="nav-item start ">
+        <li class="nav-item  ">
             <a href="javascript:;" class="nav-link nav-toggle">
                 <i class="icon-settings"></i>
                 <span class="title">System</span>
                 <span class="arrow"></span>
             </a>
             <ul class="sub-menu">
-                <li class="nav-item start ">
+                <li class="nav-item  ">
                     <a href="{{ url($shop_url . '/options') }}" class="nav-link ">
                         <i class="icon-settings"></i>
                         <span class="title">Options</span>
