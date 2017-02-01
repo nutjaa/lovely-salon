@@ -51,6 +51,12 @@
                 <input type="text" placeholder="" name="option_type" class="form-control" value="{!! $option->option_type !!}">
               </div>
           </div>
+          <div class="form-group">
+             <label class="col-md-2 control-label">Ordering:<span class="required"> * </span></label>
+              <div class="col-md-10">
+                <input type="number" placeholder="" name="ordering" class="form-control" value="{!! $option->ordering !!}">
+              </div>
+          </div>
 				</div>
 				<div class="form-actions fluid">
           <div class="row">

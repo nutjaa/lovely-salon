@@ -42,6 +42,7 @@
 							<th>#</th>
 							<th>Name</th>
 							<th>Option Type</th>
+							<th>Ordering</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
@@ -51,6 +52,7 @@
 							<td>{!! $option->id !!}</td>
 							<td>{!! $option->name !!}</td>
 							<td>{!! $option->option_type !!}</td>
+							<td>{!! $option->ordering !!}</td>
 							<td>
 								<a class="btn btn-sm btn-default btn-editable" href="{{ url($shop_url . '/options/' . $option->id . '/edit' ) }}"><i class="fa fa-pencil"></i> Edit</a>
 

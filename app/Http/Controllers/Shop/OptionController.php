@@ -9,7 +9,7 @@ use App\Company ;
 class OptionController extends Controller{
 	public function index(Request $request , $shop_url){
 		$company = Company::byUrl($shop_url)->first() ;
-		$options = Option::byCompanyId($company->id)->paginate(15);
+		$options = Option::byCompanyId($company->id)->orderBy('ordering','asc')->paginate(15);
 		return view('shop.option.index')->with('shop_url',$shop_url)->with('options',$options);
 	}
 
@@ -31,6 +31,7 @@ class OptionController extends Controller{
   	$option = new Option();
   	$option->name = $request->input('name');
   	$option->option_type = $request->input('option_type');
+    $option->ordering = $request->input('ordering');
   	$option->company_id = $company->id ;
   	$option->hidden = false ;
   	$option->save();
@@ -53,6 +54,7 @@ class OptionController extends Controller{
 
   	$option->name = $request->input('name');
   	$option->option_type = $request->input('option_type');
+    $option->ordering = $request->input('ordering');
   	$option->save();
 
   	return redirect($shop_url.'/options')->with('status', 'Success update option - ' . $option->name );
