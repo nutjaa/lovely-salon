@@ -42,7 +42,7 @@ class EmployeeController extends Controller{
 
   public function edit(Request $request , $shop_url , $id){
   	$employee = Employee::findOrFail($id);
-    $tasks = Option::byOptionType('task')->get() ;
+    $tasks = Option::byOptionType('task')->orderBy('ordering','asc')->get() ;
   	return view('shop.employee.edit')->with('shop_url',$shop_url)->with('employee',$employee)->with('tasks',$tasks);
   }
 
