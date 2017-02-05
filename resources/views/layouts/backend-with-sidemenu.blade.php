@@ -43,6 +43,12 @@
                         <span class="title">Employees</span>
                     </a>
                 </li>
+                <li class="nav-item  ">
+                    <a href="{{ url($shop_url . '/customers') }}" class="nav-link ">
+                        <i class="icon-settings"></i>
+                        <span class="title">Customers</span>
+                    </a>
+                </li>
             </ul>
         </li>
         <li class="nav-item  ">
