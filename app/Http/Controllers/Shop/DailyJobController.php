@@ -11,16 +11,37 @@ use App\Customer ;
 
 use Carbon\Carbon ;
 
+Use DB;
+
 class DailyJobController extends Controller{
 	public function index(Request $request , $shop_url){
 		$selected_date = $request->input('date',Carbon::today()->toDateString());
-		return view('shop.daily_job.index')->with('shop_url',$shop_url)->with('selected_date',$selected_date) ;
+    #DB::enableQueryLog();
+    $queue_customers = DailyJob::byTaskDate($selected_date)->byNoAmount()->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
+
+    #make sure that no duplicate ;
+    $employee_queue_ids = array() ;
+    $show_queue_employees = array() ;
+    foreach($queue_customers as $queue_customer){
+      if(!in_array($queue_customer->employee_id, $employee_queue_ids)){
+        $employee_queue_ids[] = $queue_customer->employee_id ;
+        $show_queue_employees[] = $queue_customer ;
+      }
+    }
+
+		return view('shop.daily_job.index')->with('shop_url',$shop_url)->with('selected_date',$selected_date)->with('queue_employees',$show_queue_employees);
 	}
 
-	public function create($shop_url){
+	public function create(Request $request ,$shop_url){
 		$daily_job = new DailyJob() ;
 		$daily_job->task_at = Carbon::now('Asia/Bangkok');
-		//$daily_job->task_at->setTimezone('UTC');
+    $daily_job->amount = 0 ;
+
+    $task_at = $request->input('task_at',false);
+    if($task_at){
+      $daily_job->task_at = Carbon::createFromFormat('Y-m-d',$task_at);
+    }
+
 		$company = Company::byUrl($shop_url)->first() ;
 		$employee_list = Employee::byCompanyId($company->id)->orderBy('name','asc')->pluck('name','id');
 		$task_list = Option::byCompanyId($company->id)->orderBy('ordering','asc')->pluck('name','id');
@@ -31,8 +52,7 @@ class DailyJobController extends Controller{
 
   	$this->validate($request, [
         'employee_id' => 'required',
-        'task_id' => 'required' ,
-        'amount' => 'required'
+        'task_id' => 'required'
     ]);
 
   	/*
@@ -52,7 +72,7 @@ class DailyJobController extends Controller{
 
   	$daily_job->task_id = $request->input('task_id');
   	$daily_job->description = $request->input('description');
-  	$daily_job->amount = $request->input('amount');
+  	$daily_job->amount = $request->input('amount',0);
   	$daily_job->company_id = $company->id ;
   	$daily_job->is_loyal_customer = (bool)$request->input('is_loyal_customer',false);
 
@@ -71,6 +91,6 @@ class DailyJobController extends Controller{
 
   	$daily_job->save();
 
-  	return redirect($shop_url.'/daily-jobs')->with('status', 'Success create new job!');
+  	return redirect($shop_url.'/daily-jobs?date='.$daily_job->task_at->toDateString())->with('status', 'Success create new job!');
   }
 }

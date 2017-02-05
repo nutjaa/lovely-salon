@@ -28,12 +28,13 @@ class EmployeeController extends Controller{
     ]);
 
   	$company = Company::byUrl($shop_url)->first() ;
-
+    $tasks = $request->input('tasks');
   	$employee = new Employee();
   	$employee->name = $request->input('name');
   	$employee->description = $request->input('description');
   	$employee->position = $request->input('position');
   	$employee->base_salary = $request->input('base_salary');
+    $employee->tasks = $tasks ;
   	$employee->company_id = $company->id ;
   	$employee->save();
 

@@ -8,7 +8,7 @@ class Employee extends Model{
 
 	/***** RELATION ***/
 	public function company(){
-		return $this->belongTo('App\Company', 'company_id');
+		return $this->belongsTo('App\Company', 'company_id');
 	}
 
 	/***** SCOPE *****/

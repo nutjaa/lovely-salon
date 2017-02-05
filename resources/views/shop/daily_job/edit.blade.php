@@ -36,7 +36,7 @@
               <i class="fa fa-user"></i>Job
             </div>
             <div class="actions btn-set">
-                <a href="{{ url($shop_url . '/daily-jobs') }}" class="btn default"><i class="fa fa-angle-left"></i> Back</a>
+                <a href="{{ url($shop_url . '/daily-jobs?date='.$daily_job->task_at->toDateString()) }}" class="btn default"><i class="fa fa-angle-left"></i> Back</a>
                 <button type="submit" class="btn green"><i class="fa fa-check"></i> Save</button>
             </div>
         </div>
@@ -54,7 +54,7 @@
             <label class="col-md-2 control-label">Date:<span class="required"> * </span></label>
             <div class="col-md-4">
               <div class="input-group date form_datetime">
-                <input type="text" name="task_at" size="16" readonly class="form-control" value="{!! $daily_job->task_at->format('Y-m-d h:i') !!}">
+                <input type="text" name="task_at" size="16" readonly class="form-control" value="{!! $daily_job->task_at->format('Y-m-d H:i') !!}">
                 <span class="input-group-btn">
                   <button class="btn default date-set" type="button">
                     <i class="fa fa-calendar"></i>
@@ -103,7 +103,7 @@
           <div class="row">
             <div class="col-md-offset-2 col-md-10">
               <button type="submit" class="btn green">Save</button>
-              <a href="{{ url($shop_url . '/daily-jobs') }}" class="btn default">Cancel</a>
+              <a href="{{ url($shop_url . '/daily-jobs?date='.$daily_job->task_at->toDateString()) }}" class="btn default">Cancel</a>
             </div>
           </div>
         </div>

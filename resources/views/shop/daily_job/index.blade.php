@@ -21,13 +21,27 @@
       <span class="caption-subject font-green sbold uppercase"> Daily Jobs </span>
     </div>
     <div class="actions">
-       <a href="{{ url($shop_url . '/daily-jobs/create') }}" class="btn btn-transparent blue btn-outline btn-circle btn-sm">Create new job</a>
+       <a href="{{ url($shop_url . '/daily-jobs/create?task_at='.$selected_date) }}" class="btn btn-transparent blue btn-outline btn-circle btn-sm">Create new job</a>
     </div>
 	</div>
 	<div class="portlet-body">
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4">
 				<input type="text" value="{!! $selected_date !!}" size="16" name="date" class="form-control form-control-inline input-medium date-picker">
+			</div>
+		</div>
+		<br/>
+		<div class="dataTables_wrapper no-footer">
+			<div class="table-responsive">
+				<table class="table table-striped table-bordered table-hover">
+					<thead>
+						<tr>
+						@foreach($queue_employees as $queue_employee)
+							<th>{!! $queue_employee->employee->name !!}</th>
+						@endforeach
+						</tr>
+					</thead>
+				</table>
 			</div>
 		</div>
 	</div>
