@@ -21,8 +21,7 @@
       <span class="caption-subject font-green sbold uppercase"> Daily Jobs </span>
     </div>
     <div class="actions">
-
-      <button type="submit" class="btn btn-transparent blue btn-outline btn-sm" href="http://local-lovely-salon.com/olympic-salon/employees/create">Create new job</button>
+       <a href="{{ url($shop_url . '/daily-jobs/create') }}" class="btn btn-transparent blue btn-outline btn-circle btn-sm">Create new job</a>
     </div>
 	</div>
 	<div class="portlet-body">
@@ -44,7 +43,7 @@
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
-<script src="../assets/pages/scripts/page-daily-jobs.js" type="text/javascript"></script>
+<script src="/assets/pages/scripts/page-daily-jobs.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
 
 @endsection
