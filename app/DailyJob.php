@@ -32,4 +32,14 @@ class DailyJob extends Model{
 	public function scopeByNoAmount($query){
 		return $query->where('amount',0);
 	}
+	public function scopeByHasAmount($query){
+		return $query->where('amount','<>',0);
+	}
+
+	/***** ATTRIBUTE ****/
+	public function getTaskAtFormatAttribute(){
+		$date = Carbon::createFromFormat('Y-m-d H:i:s', $this->task_at  );
+		$date->setTimezone('Asia/Bangkok');
+		return $date->format('Y-m-d H:i');
+  }
 }

@@ -13,6 +13,10 @@ class Option extends Model
 		return $query->where('option_type',$option_type);
 	}
 
+	public function scopeByName($query,$name){
+		return $query->where('name',$name);
+	}
+
 	public function scopeByAvailable($query){
 		return $query->where('hidden',false)->whereNull('deleted_at ');
 	}

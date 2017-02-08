@@ -10,7 +10,7 @@
   <a href="#">Shops</a>
 </li>
 <li>
-  <a href="{{ url($shop_url.'/daily-jobs') }}">Daily Jobs</a>
+  <a href="{{ url($shop_url . '/daily-jobs?date='.$daily_job->task_at->toDateString()) }}">Daily Jobs</a>
 </li>
 @if(! $daily_job->id )
 <li>Create new daily job</li>
@@ -54,7 +54,7 @@
             <label class="col-md-2 control-label">Date:<span class="required"> * </span></label>
             <div class="col-md-4">
               <div class="input-group date form_datetime">
-                <input type="text" name="task_at" size="16" readonly class="form-control" value="{!! $daily_job->task_at->format('Y-m-d H:i') !!}">
+                <input type="text" name="task_at" size="16" readonly class="form-control" value="{!! $daily_job->task_at_format !!}">
                 <span class="input-group-btn">
                   <button class="btn default date-set" type="button">
                     <i class="fa fa-calendar"></i>

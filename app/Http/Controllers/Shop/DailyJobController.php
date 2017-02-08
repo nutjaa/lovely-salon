@@ -29,7 +29,35 @@ class DailyJobController extends Controller{
       }
     }
 
-		return view('shop.daily_job.index')->with('shop_url',$shop_url)->with('selected_date',$selected_date)->with('queue_employees',$show_queue_employees);
+    $daily_jobs = DailyJob::byTaskDate($selected_date)->byHasAmount()->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
+    $rows = [] ;
+
+    foreach ($daily_jobs as $daily_job) {
+      $insert = false ;
+      foreach($rows as &$row){
+        if(!isset($row[$daily_job->employee_id])){
+          $row[$daily_job->employee_id] = $daily_job ;
+          $insert = true ;
+          break ;
+        }
+      }
+      if($insert === false){
+        $rows[] = [
+          $daily_job->employee_id => $daily_job
+        ];
+      }
+    }
+
+    $summary = [] ;
+    foreach ($daily_jobs as $daily_job) {
+      if(!isset($summary[$daily_job->employee_id])){
+        $summary[$daily_job->employee_id] = $daily_job->amount ;
+      }else{
+        $summary[$daily_job->employee_id] += $daily_job->amount ;
+      }
+    }
+
+		return view('shop.daily_job.index')->with('shop_url',$shop_url)->with('selected_date',$selected_date)->with('queue_employees',$show_queue_employees)->with('rows',$rows)->with('employee_queue_ids',$employee_queue_ids)->with('summary',$summary);
 	}
 
 	public function create(Request $request ,$shop_url){
@@ -38,8 +66,12 @@ class DailyJobController extends Controller{
     $daily_job->amount = 0 ;
 
     $task_at = $request->input('task_at',false);
+    $employee_id = $request->input('employee_id');
     if($task_at){
       $daily_job->task_at = Carbon::createFromFormat('Y-m-d',$task_at);
+    }
+    if($employee_id){
+      $daily_job->employee_id = $employee_id ;
     }
 
 		$company = Company::byUrl($shop_url)->first() ;
@@ -92,5 +124,9 @@ class DailyJobController extends Controller{
   	$daily_job->save();
 
   	return redirect($shop_url.'/daily-jobs?date='.$daily_job->task_at->toDateString())->with('status', 'Success create new job!');
+  }
+
+  public function autoCreateQueueTaskIfNotExists($daily_job){
+
   }
 }

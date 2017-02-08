@@ -31,19 +31,56 @@
 			</div>
 		</div>
 		<br/>
-		<div class="dataTables_wrapper no-footer">
 			<div class="table-responsive">
-				<table class="table table-striped table-bordered table-hover">
+				<table class="table table-striped table-bordered table-hover ">
 					<thead>
 						<tr>
 						@foreach($queue_employees as $queue_employee)
-							<th>{!! $queue_employee->employee->name !!}</th>
+							<th style="width:100px;">{!! $queue_employee->employee->name !!}&nbsp;<a href="{{ url($shop_url . '/daily-jobs/create?task_at='.$selected_date.'&employee_id='.$queue_employee->employee->id) }}"><i class="icon-plus icons"></i></a></th>
 						@endforeach
 						</tr>
 					</thead>
+					<tbody>
+						@foreach($rows as $row)
+						<tr>
+							@foreach($employee_queue_ids as $employee_queue_id)
+								@if(isset($row[$employee_queue_id]))
+									<td>
+										<table width="100%">
+											<tr>
+												<td width="50%">{!! $row[$employee_queue_id]->task->name !!}</td>
+												<td width="50%">{!! $row[$employee_queue_id]->amount !!}</td>
+											</tr>
+
+										</table>
+									</td>
+								@else
+									<td>&nbsp;</td>
+								@endif
+							@endforeach
+						</tr>
+						@endforeach
+					</tbody>
+					<tfoot>
+						<tr>
+							@foreach($employee_queue_ids as $employee_queue_id)
+								@if(isset($summary[$employee_queue_id]))
+									<td>
+										<table width="100%">
+											<tr>
+												<td width="50%">รวม</td>
+												<td width="50%">{!! $summary[$employee_queue_id] !!}</td>
+											</tr>
+										</table>
+									</td>
+								@else
+									<td>&nbsp;</td>
+								@endif
+							@endforeach
+						</tr>
+					</tfoot>
 				</table>
 			</div>
-		</div>
 	</div>
 </div>
 

@@ -21,7 +21,7 @@ class CreateDailyJobsTable extends Migration
             $table->text('description');
             $table->boolean('is_loyal_customer');
             $table->integer('customer_id');
-            $table->decimal('amount', 5, 2);
+            $table->decimal('amount', 7, 2);
             $table->dateTime('task_at');
         });
     }
