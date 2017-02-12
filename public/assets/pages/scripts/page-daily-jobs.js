@@ -12,9 +12,18 @@ var handleDatePickers = function () {
     //$('body').removeClass("modal-open"); // fix bug when inline picker is used in modal
   }
 
+  //click column to dit ;
+
+  $('.task-col').click(function(){
+    var id = $(this).data('id');
+    window.location.href = '//' + location.host + '/'+shop_url+'/daily-jobs/' + id ;
+  });
+
 
 }
 
 jQuery(document).ready(function() {
 	handleDatePickers();
+
+
 });

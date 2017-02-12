@@ -45,8 +45,8 @@
 						<tr>
 							@foreach($employee_queue_ids as $employee_queue_id)
 								@if(isset($row[$employee_queue_id]))
-									<td>
-										<table width="100%">
+									<td class="task-col @if($row[$employee_queue_id]->is_loyal_customer) success @endif " data-id="{{ $row[$employee_queue_id]->id }}">
+										<table width="100%" >
 											<tr>
 												<td width="50%">{!! $row[$employee_queue_id]->task->name !!}</td>
 												<td width="50%">{!! $row[$employee_queue_id]->amount !!}</td>
@@ -95,6 +95,11 @@
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script src="/assets/pages/scripts/page-daily-jobs.js" type="text/javascript"></script>
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script type="text/javascript">
+  var shop_url = '{!! $shop_url !!}' ;
+
+</script>
 <!-- END PAGE LEVEL SCRIPTS -->
 
 @endsection

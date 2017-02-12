@@ -36,6 +36,10 @@
               <i class="fa fa-user"></i>Job
             </div>
             <div class="actions btn-set">
+              @if($daily_job->id)
+                <button id="btn-delete-daily-job" class="btn red-mint btn-large" data-toggle="confirmation" data-original-title="Are you sure ?"
+                  title="" data-placement="bottom" type="button">Delete</button>
+              @endif
                 <a href="{{ url($shop_url . '/daily-jobs?date='.$daily_job->task_at->toDateString()) }}" class="btn default"><i class="fa fa-angle-left"></i> Back</a>
                 <button type="submit" class="btn green"><i class="fa fa-check"></i> Save</button>
             </div>
@@ -84,7 +88,7 @@
           <div class="form-group">
              <label class="col-md-2 control-label">Royal Customer:</label>
             <div class="col-md-10">
-              {{Form::checkbox('is_loyal_customer', $daily_job->is_loyal_customer)}}
+              {{Form::checkbox('is_loyal_customer', 1 , $daily_job->is_loyal_customer)}}
             </div>
           </div>
           <div class="form-group">
@@ -120,12 +124,13 @@
 <!-- BEGIN PAGE LEVEL PLUGINS -->
 <script src="/assets/global/plugins/moment.min.js" type="text/javascript"></script>
 <script src="/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+<script src="/assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL PLUGINS -->
 
 <!-- BEGIN PAGE LEVEL SCRIPTS -->
 <script type="text/javascript">
   var shop_url = '{!! $shop_url !!}' ;
-
+  var daily_job_id = '{{ $daily_job->id }}' ;
 </script>
 <script src="/assets/pages/scripts/page-daily-job.js" type="text/javascript"></script>
 <script src="/assets/global/plugins/typeahead/handlebars.min.js" type="text/javascript"></script>

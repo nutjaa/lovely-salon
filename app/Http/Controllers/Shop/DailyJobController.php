@@ -60,6 +60,15 @@ class DailyJobController extends Controller{
 		return view('shop.daily_job.index')->with('shop_url',$shop_url)->with('selected_date',$selected_date)->with('queue_employees',$show_queue_employees)->with('rows',$rows)->with('employee_queue_ids',$employee_queue_ids)->with('summary',$summary);
 	}
 
+  private function createEmployeeList(Request $request,$shop_url){
+
+
+    $company = Company::byUrl($shop_url)->first() ;
+    $employee_list = Employee::byCompanyId($company->id)->orderBy('name','asc')->pluck('name','id');
+
+    return $employee_list ;
+  }
+
 	public function create(Request $request ,$shop_url){
 		$daily_job = new DailyJob() ;
 		$daily_job->task_at = Carbon::now('Asia/Bangkok');
@@ -74,8 +83,8 @@ class DailyJobController extends Controller{
       $daily_job->employee_id = $employee_id ;
     }
 
-		$company = Company::byUrl($shop_url)->first() ;
-		$employee_list = Employee::byCompanyId($company->id)->orderBy('name','asc')->pluck('name','id');
+    $company = Company::byUrl($shop_url)->first() ;
+    $employee_list = $this->createEmployeeList($request,$shop_url);
 		$task_list = Option::byCompanyId($company->id)->orderBy('ordering','asc')->pluck('name','id');
    	return view('shop.daily_job.edit')->with('shop_url',$shop_url)->with('daily_job',$daily_job)->with('employee_list',$employee_list)->with('task_list',$task_list) ;
   }
@@ -125,6 +134,66 @@ class DailyJobController extends Controller{
 
   	return redirect($shop_url.'/daily-jobs?date='.$daily_job->task_at->toDateString())->with('status', 'Success create new job!');
   }
+
+  public function show(Request $request , $shop_url , $id){
+    $daily_job = DailyJob::where('id',$id)->first();
+    $company = Company::byUrl($shop_url)->first() ;
+    $employee_list = $this->createEmployeeList($request,$shop_url);
+    $task_list = Option::byCompanyId($company->id)->orderBy('ordering','asc')->pluck('name','id');
+
+    return view('shop.daily_job.edit')->with('shop_url',$shop_url)->with('daily_job',$daily_job)->with('employee_list',$employee_list)->with('task_list',$task_list) ;
+  }
+
+  public function update(Request $request , $shop_url , $id){
+    $daily_job = DailyJob::where('id',$id)->first();
+
+    $this->validate($request, [
+        'employee_id' => 'required',
+        'task_id' => 'required'
+    ]);
+
+    /*
+    $all = $request->all() ;
+    print_r($all) ; die() ;
+    */
+
+    $company = Company::byUrl($shop_url)->first() ;
+
+    $daily_job->employee_id = $request->input('employee_id');
+
+    $date = Carbon::createFromFormat('Y-m-d H:i', $request->input('task_at'),'Asia/Bangkok');
+    $date->setTimezone('UTC');
+
+    $daily_job->task_at =  $date->toDateTimeString() ;
+
+    $daily_job->task_id = $request->input('task_id');
+    $daily_job->description = $request->input('description');
+    $daily_job->amount = $request->input('amount',0);
+    $daily_job->company_id = $company->id ;
+    $daily_job->is_loyal_customer = (bool)$request->input('is_loyal_customer',false);
+
+    $customer_name = $request->input('customer_name');
+    if(trim($customer_name)){
+      $customer = Customer::byName($customer_name)->byCompanyId($company->id)->first();
+      if(is_null($customer)){
+        $customer = new Customer() ;
+        $customer->name = $customer_name ;
+        $customer->description = '' ;
+        $customer->company_id = $company->id ;
+        $customer->save() ;
+      }
+      $daily_job->customer_id = $customer->id ;
+    }
+
+    $daily_job->save();
+    return redirect($shop_url.'/daily-jobs?date='.$daily_job->task_at->toDateString())->with('status', 'Success create new job!');
+  }
+
+  public function destroy(Request $request , $shop_url , $id){
+    DailyJob::destroy($id);
+    return response()->json(['success' => true ]);
+  }
+
 
   public function autoCreateQueueTaskIfNotExists($daily_job){
 

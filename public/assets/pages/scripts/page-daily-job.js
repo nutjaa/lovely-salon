@@ -7,6 +7,20 @@ var handleDatePickers = function () {
       pickerPosition:   "bottom-left"
   });
 
+
+  $('#btn-delete-daily-job').on('confirmed.bs.confirmation', function () {
+    $.ajax({
+      url: '/' + shop_url + '/daily-jobs/' + daily_job_id,
+      type: 'POST',
+      data:{
+        '_token' : $('input[name="_token"]').val() ,
+        '_method' : 'DELETE'
+      },
+      success: function(result) {
+        window.location.href ='//' + location.host + '/'+shop_url+'/daily-jobs?date=' + moment($('input[name=task_at]').val()).format('YYYY-MM-DD')  ;
+      }
+    });
+  });
 }
 
 var handleTwitterTypeahead = function(){
