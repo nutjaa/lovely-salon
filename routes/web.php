@@ -23,6 +23,7 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::resource('employees', 'Shop\EmployeeController');
 		Route::resource('options', 'Shop\OptionController');
 		Route::resource('daily-jobs','Shop\DailyJobController');
+		Route::resource('daily-summary','Shop\DailySummaryController');
 		Route::get('customers/listing','Shop\CustomerController@listing');
 		Route::resource('customers', 'Shop\CustomerController');
 	});

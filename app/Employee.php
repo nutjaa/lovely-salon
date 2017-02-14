@@ -15,6 +15,12 @@ class Employee extends Model{
 	public function scopeByCompanyId($query,$company_id){
 		return $query->where('company_id',$company_id);
 	}
+	public function scopeByType1($query){
+		return $query->where('position','ช่างซอย');
+	}
+	public function scopeByType2($query){
+		return $query->where('position','ผู้ช่วยช่าง');
+	}
 
 	/***** ATTRIBUTE *****/
 	public function setTasksAttribute($value){
