@@ -2,7 +2,7 @@
 
 @section('breadcrumbs')
 <li>
-    <a href="#">Shops</a>
+    <a href="#">{{ trans('breadcrumb.shops') }}</a>
 </li>
 @endsection
 
@@ -22,7 +22,7 @@
     </button>
     <ul class="dropdown-menu-v2">
         <li>
-            <a href="{{ url('shops/create') }}">Create new shop</a>
+            <a href="{{ url('shops/create') }}">{{ trans('shop-selector.new-shop') }}</a>
         </li>
     </ul>
 </div>
@@ -48,7 +48,7 @@
                         <div class="blog-post-foot">
                             <div class="blog-post-meta">
                                 <i class="icon-users font-blue"></i>
-                                <a href="javascript:;">14 Employees</a>
+                                <a href="{{ url($company_user->company->url . '/employees') }}">{{ $company_user->company->employees->count() }} {{ trans('shop-selector.employees') }}</a>
                             </div>
                         </div>
                     </div>

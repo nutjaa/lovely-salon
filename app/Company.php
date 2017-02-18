@@ -9,6 +9,9 @@ class Company extends Model{
 	public function company_users(){
 		return $this->hasMany('App\ComapnyUser', 'company_id');
 	}
+	public function employees(){
+		return $this->hasMany('App\Employee','company_id');
+	}
 
 	/**** SCOPE ****/
 	public function scopeByUrl($query,$url){
