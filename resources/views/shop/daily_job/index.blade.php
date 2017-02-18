@@ -7,9 +7,9 @@
 
 @section('breadcrumbs')
 <li>
-    <a href="#">Shops</a>
+    <a href="#">{{ trans('breadcrumb.shops') }}</a>
 </li>
-<li>Daily Jobs</li>
+<li>{{ trans('breadcrumb.daily-task') }}</li>
 @endsection
 
 @section('content')
@@ -17,11 +17,11 @@
 <div class="portlet light portlet-fit portlet-datatable bordered">
 	<div class="portlet-title">
 		<div class="caption">
-      <i class="icon-settings font-green"></i>
-      <span class="caption-subject font-green sbold uppercase"> Daily Jobs </span>
+      <i class="icon-list font-green"></i>
+      <span class="caption-subject font-green sbold uppercase"> {{ trans('breadcrumb.daily-task') }} </span>
     </div>
     <div class="actions">
-       <a href="{{ url($shop_url . '/daily-jobs/create?task_at='.$selected_date) }}" class="btn btn-transparent blue btn-outline btn-circle btn-sm">Create new job</a>
+       <a href="{{ url($shop_url . '/daily-jobs/create?task_at='.$selected_date) }}" class="btn btn-transparent blue btn-outline btn-circle btn-sm">{{ trans('daily-task.create-new') }}</a>
     </div>
 	</div>
 	<div class="portlet-body">

@@ -1,5 +1,6 @@
 <?php
 
 return [
-	'shops' => 'ร้านทำผม'
+	'shops' => 'ร้านทำผม',
+	'daily-task' => 'ใบคิว'
 ];

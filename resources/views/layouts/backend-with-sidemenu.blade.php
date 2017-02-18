@@ -23,14 +23,14 @@
         <li class="nav-item start ">
             <a href="{{ url($shop_url . '/daily-jobs') }}" class="nav-link ">
                 <i class="icon-notebook"></i>
-                <span class="title">Daily Tasks</span>
+                <span class="title">{{ trans('side-bar.daily-taks') }}</span>
                 <span class="arrow"></span>
             </a>
         </li>
         <li class="nav-item start ">
             <a href="{{ url($shop_url . '/daily-summary') }}" class="nav-link ">
                 <i class="icon-notebook"></i>
-                <span class="title">Daily Summary</span>
+                <span class="title">{{ trans('side-bar.daily-summary') }}</span>
                 <span class="arrow"></span>
             </a>
         </li>
