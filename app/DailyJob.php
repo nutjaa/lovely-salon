@@ -35,6 +35,12 @@ class DailyJob extends Model{
 	public function scopeByHasAmount($query){
 		return $query->where('amount','<>',0);
 	}
+	public function scopeByEmployee($query,$employee_id){
+		return $query->where('employee_id',$employee_id);
+	}
+	public function scopeByCompany($query,$company_id){
+		return $query->where('company_id',$company_id);
+	}
 
 	/***** ATTRIBUTE ****/
 	public function getTaskAtFormatAttribute(){
