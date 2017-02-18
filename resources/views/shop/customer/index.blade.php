@@ -4,7 +4,7 @@
 
 @section('breadcrumbs')
 <li>
-    <a href="#">Shops</a>
+    <a href="#">{{ trans('breadcrumb.shops') }}</a>
 </li>
 <li>Customers</li>
 @endsection

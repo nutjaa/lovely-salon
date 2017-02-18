@@ -7,9 +7,9 @@
 
 @section('breadcrumbs')
 <li>
-    <a href="#">Shops</a>
+    <a href="#">{{ trans('breadcrumb.shops') }}</a>
 </li>
-<li>Daily Summary</li>
+<li>{{ trans('breadcrumb.daily-summary') }}</li>
 @endsection
 
 @section('content')
@@ -17,8 +17,8 @@
 <div class="portlet light portlet-fit portlet-datatable bordered">
 	<div class="portlet-title">
 		<div class="caption">
-      <i class="icon-settings font-green"></i>
-      <span class="caption-subject font-green sbold uppercase"> Daily Summary </span>
+      <i class="icon-list font-green"></i>
+      <span class="caption-subject font-green sbold uppercase"> {{ trans('breadcrumb.daily-summary') }} </span>
     </div>
     <div class="actions">
     </div>

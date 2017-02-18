@@ -49,4 +49,13 @@ var handleTwitterTypeahead = function(){
 jQuery(document).ready(function() {
 	handleDatePickers();
 	handleTwitterTypeahead();
+
+  $('select[name=employee_id]').change(function(){
+    var employee_id = $(this).val();
+    if(daily_job_id){
+      window.location.href ='//' + location.host + '/'+shop_url+'/daily-jobs/'+daily_job_id+'?task_at=' + moment($('input[name=task_at]').val()).format('YYYY-MM-DD')+'&employee_id=' + employee_id ;
+    }else{
+      window.location.href ='//' + location.host + '/'+shop_url+'/daily-jobs/create?task_at=' + moment($('input[name=task_at]').val()).format('YYYY-MM-DD')+'&employee_id=' + employee_id  ;
+    }
+  });
 });

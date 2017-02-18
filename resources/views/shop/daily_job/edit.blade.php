@@ -51,7 +51,7 @@
 					<div class="form-group">
              <label class="col-md-2 control-label">{{ trans('daily-task.employee') }}:<span class="required"> * </span></label>
               <div class="col-md-10">
-                {{ Form::select('employee_id', $employee_list , $daily_job->employee_id , ['class' => 'form-control']) }}
+                {{ Form::select('employee_id', $employee_list , $daily_job->employee_id , ['class' => 'form-control' , 'autocomplete' => 'off' ]) }}
               </div>
           </div>
           <div class="form-group">

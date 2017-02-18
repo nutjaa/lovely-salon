@@ -49,9 +49,13 @@
 										<table width="100%" >
 											<tr>
 												<td width="50%">{!! $row[$employee_queue_id]->task->name !!}</td>
-												<td width="50%">{!! $row[$employee_queue_id]->amount !!}</td>
+												<td width="50%" class="text-right">{!! $row[$employee_queue_id]->amount !!}</td>
 											</tr>
-
+											@if($row[$employee_queue_id]->description)
+											<tr>
+												<td colspan="2"><small>{{ $row[$employee_queue_id]->description }}</small></td>
+											</tr>
+											@endif
 										</table>
 									</td>
 								@else
@@ -69,7 +73,7 @@
 										<table width="100%">
 											<tr>
 												<td width="50%">รวม</td>
-												<td width="50%">{!! $summary[$employee_queue_id] !!}</td>
+												<td width="50%" class="text-right">{!! $summary[$employee_queue_id] !!}</td>
 											</tr>
 										</table>
 									</td>

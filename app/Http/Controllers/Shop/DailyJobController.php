@@ -85,7 +85,12 @@ class DailyJobController extends Controller{
 
     $company = Company::byUrl($shop_url)->first() ;
     $employee_list = $this->createEmployeeList($request,$shop_url);
-		$task_list = Option::byCompanyId($company->id)->byOptionType('task')->orderBy('ordering','asc')->pluck('name','id');
+    if($daily_job->employee_id){
+      $task_list = $daily_job->employee->tasks->pluck('name','id'); ;
+    }else{
+      $task_list = Option::byCompanyId($company->id)->byOptionType('task')->orderBy('ordering','asc')->pluck('name','id');
+    }
+
    	return view('shop.daily_job.edit')->with('shop_url',$shop_url)->with('daily_job',$daily_job)->with('employee_list',$employee_list)->with('task_list',$task_list) ;
   }
 
