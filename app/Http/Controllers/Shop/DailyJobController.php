@@ -65,8 +65,10 @@ class DailyJobController extends Controller{
 
     $company = Company::byUrl($shop_url)->first() ;
     $employee_list = Employee::byCompanyId($company->id)->orderBy('name','asc')->pluck('name','id');
+    $first = collect(['-1'=>trans('daily-task.select-employee') ]) ;
 
-    return $employee_list ;
+
+    return  $first->all() + $employee_list->all() ;
   }
 
 	public function create(Request $request ,$shop_url){
@@ -151,6 +153,11 @@ class DailyJobController extends Controller{
     $company = Company::byUrl($shop_url)->first() ;
     $employee_list = $this->createEmployeeList($request,$shop_url);
     $task_list = $daily_job->employee->tasks->pluck('name','id'); ;
+
+    $employee_id = $request->input('employee_id');
+    if($employee_id){
+      $daily_job->employee_id = $employee_id ;
+    }
 
     return view('shop.daily_job.edit')->with('shop_url',$shop_url)->with('daily_job',$daily_job)->with('employee_list',$employee_list)->with('task_list',$task_list) ;
   }

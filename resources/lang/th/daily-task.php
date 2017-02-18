@@ -13,5 +13,6 @@ return [
 	'amount' => 'ราคา',
 	'royal-customer' => 'ลูกค้าประจำ',
 	'customer' => 'ลูกค้า',
-	'success-message' => 'บันทึกงานลงใบยังใบคิวได้สำเร็จ'
+	'success-message' => 'บันทึกงานลงใบยังใบคิวได้สำเร็จ',
+	'select-employee' => 'กรุณาเลือกพนักงาน'
 ];
