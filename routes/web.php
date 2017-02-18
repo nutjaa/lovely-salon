@@ -26,6 +26,9 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::resource('daily-summary','Shop\DailySummaryController');
 		Route::get('customers/listing','Shop\CustomerController@listing');
 		Route::resource('customers', 'Shop\CustomerController');
+		Route::resource('date-ranges', 'Shop\DateRangeController');
+		Route::get('task-percent','Shop\TaskPercentController@index');
+		Route::post('task-percent','Shop\TaskPercentController@store');
 	});
 });
 
