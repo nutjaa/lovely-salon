@@ -36,7 +36,7 @@
 					<thead>
 						<tr>
 						@foreach($queue_employees as $queue_employee)
-							<th style="width:100px;">{!! $queue_employee->employee->name !!}&nbsp;<a href="{{ url($shop_url . '/daily-jobs/create?task_at='.$selected_date.'&employee_id='.$queue_employee->employee->id) }}"><i class="icon-plus icons"></i></a></th>
+							<th style="width:100px;"><a href="{{ url($shop_url . '/daily-jobs/' . $queue_employee->id) }}">{!! $queue_employee->employee->name !!}</a>&nbsp;&nbsp;&nbsp;<a href="{{ url($shop_url . '/daily-jobs/create?task_at='.$selected_date.'&employee_id='.$queue_employee->employee->id) }}"><i class="icon-plus icons"></i></a></th>
 						@endforeach
 						</tr>
 					</thead>
