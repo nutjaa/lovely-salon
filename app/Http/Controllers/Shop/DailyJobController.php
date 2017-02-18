@@ -132,7 +132,7 @@ class DailyJobController extends Controller{
 
   	$daily_job->save();
 
-  	return redirect($shop_url.'/daily-jobs?date='.$daily_job->task_at->toDateString())->with('status', 'Success create new job!');
+  	return redirect($shop_url.'/daily-jobs?date='.$daily_job->task_at->toDateString())->with('status', trans('daily-task.success-message') );
   }
 
   public function show(Request $request , $shop_url , $id){
@@ -186,7 +186,7 @@ class DailyJobController extends Controller{
     }
 
     $daily_job->save();
-    return redirect($shop_url.'/daily-jobs?date='.$daily_job->task_at->toDateString())->with('status', 'Success create new job!');
+    return redirect($shop_url.'/daily-jobs?date='.$daily_job->task_at->toDateString())->with('status', trans('daily-task.success-message') );
   }
 
   public function destroy(Request $request , $shop_url , $id){
