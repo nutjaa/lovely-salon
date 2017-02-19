@@ -39,4 +39,24 @@ class DateRange extends Model{
 		return   $date->format('Y-m-d H:i');
   }
 
+  public function getStartDayFormatAttribute(){
+		if(!is_null($this->start_date)){
+			$date = Carbon::createFromFormat('Y-m-d H:i:s', $this->start_date);
+		}else{
+			$date = Carbon::now();
+		}
+
+		$date->setTimezone('Asia/Bangkok');
+		return $date->format('d');
+  }
+  public function getEndDayFormatAttribute(){
+		if(!is_null($this->end_date)){
+			$date = Carbon::createFromFormat('Y-m-d H:i:s', $this->end_date->subDay());
+		}else{
+			$date = Carbon::now();
+		}
+		$date->setTimezone('Asia/Bangkok');
+		return   $date->format('d');
+  }
+
 }

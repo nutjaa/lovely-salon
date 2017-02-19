@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::post('task-percent','Shop\TaskPercentController@store');
 
 		Route::get('monthly-all-employee1','Shop\MonthlyReportController@all1');
+		Route::get('monthly-single-employee1','Shop\MonthlyReportController@single1');
 	});
 });
 

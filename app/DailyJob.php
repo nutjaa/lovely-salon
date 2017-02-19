@@ -48,4 +48,15 @@ class DailyJob extends Model{
 		$date->setTimezone('Asia/Bangkok');
 		return $date->format('Y-m-d H:i');
   }
+
+  public function getTaskAtDayFormatAttribute(){
+		if(!is_null($this->task_at)){
+			$date = Carbon::createFromFormat('Y-m-d H:i:s', $this->task_at);
+		}else{
+			$date = Carbon::now();
+		}
+
+		$date->setTimezone('Asia/Bangkok');
+		return $date->format('d');
+  }
 }
