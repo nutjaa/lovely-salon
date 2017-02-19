@@ -4,5 +4,6 @@ return [
 	'daily-taks' => 'ใบคิว',
 	'daily-summary' => 'ใบรายงานพนักงาน',
 	'daily' => 'รายวัน',
-	'monthly' => 'รายเดือน'
+	'monthly' => 'รายเดือน',
+	'monthly-all-employee1' => 'ใบรายงานช่างซอย(รวม)'
 ];

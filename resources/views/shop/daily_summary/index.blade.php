@@ -24,7 +24,7 @@
     </div>
 	</div>
 	<div class="portlet-body">
-		<form method="GET" class="form-horizontal" role="form"  " action="{{ url($shop_url . '/daily-summary') }}">
+		<form method="GET" class="form-horizontal" role="form" action="{{ url($shop_url . '/daily-summary') }}">
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4">
 				<input type="text" value="{!! $selected_date !!}" size="16" name="date" class="form-control form-control-inline input-medium date-picker">

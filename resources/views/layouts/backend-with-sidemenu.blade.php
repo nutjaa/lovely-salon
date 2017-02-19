@@ -40,6 +40,13 @@
         <li class="heading">
             <h3 class="uppercase">{{ trans('side-bar.monthly') }}</h3>
         </li>
+        <li class="nav-item">
+            <a href="{{ url($shop_url . '/monthly-all-employee1') }}" class="nav-link ">
+                <i class="icon-notebook"></i>
+                <span class="title">{{ trans('side-bar.monthly-all-employee1') }}</span>
+                <span class="arrow"></span>
+            </a>
+        </li>
         <li class="heading">
             <h3 class="uppercase">Settings</h3>
         </li>
