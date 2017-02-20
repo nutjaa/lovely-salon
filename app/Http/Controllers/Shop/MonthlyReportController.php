@@ -136,12 +136,9 @@ class MonthlyReportController extends Controller{
       }
 
       foreach($daily_jobs as $daily_job){
-        echo (int)$daily_job->task_at_day_format . '---' . $i  . '|';
         if((int)$daily_job->task_at_day_format != $i){
           continue ;
         }
-
-
 
         $data['data'][$daily_job->task_id]['count']++ ;
         $data['data'][$daily_job->task_id]['amount'] += $daily_job->amount ;
