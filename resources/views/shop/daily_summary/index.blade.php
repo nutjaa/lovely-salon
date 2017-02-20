@@ -27,7 +27,7 @@
 		<form method="GET" class="form-horizontal" role="form" action="{{ url($shop_url . '/daily-summary') }}">
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4">
-				<input type="text" value="{!! $selected_date !!}" size="16" name="date" class="form-control form-control-inline input-medium date-picker">
+				<input type="text" value="{!! $selected_date !!}" size="16" name="date" readonly="true" class="form-control form-control-inline input-medium date-picker">
 			</div>
 			<div class="col-md-2">
 				{{ Form::select('employee_type', $employee_types , $employee_type , ['class' => 'form-control' ,'name' => 'employee_type']) }}

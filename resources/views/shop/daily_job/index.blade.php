@@ -27,7 +27,7 @@
 	<div class="portlet-body">
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4">
-				<input type="text" value="{!! $selected_date !!}" size="16" name="date" class="form-control form-control-inline input-medium date-picker">
+				<input type="text" value="{!! $selected_date !!}" size="16" name="date" readonly="true" class="form-control form-control-inline input-medium date-picker">
 			</div>
 		</div>
 		<br/>
