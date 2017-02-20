@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 		Route::get('monthly-all-employee1','Shop\MonthlyReportController@all1');
 		Route::get('monthly-single-employee1','Shop\MonthlyReportController@single1');
+		Route::get('monthly-salary','Shop\MonthlyReportController@salary');
 	});
 });
 

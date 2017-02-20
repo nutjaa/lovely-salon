@@ -168,4 +168,81 @@ class MonthlyReportController extends Controller{
     return view('shop.monthly-summary.single1')->with('shop_url',$shop_url)->with('date_ranges',$date_ranges)->with('date_range_id',$date_range_id)->with('employees',$employees)->with('employee_id',$employee_id)->with('task_list',$task_list)->with('results',$results)->with('summary_by_task',$summary_by_task);
 
   }
+
+  public function salary(Request $request , $shop_url){
+    $date_ranges = DateRange::orderBy('start_date','desc')->pluck('name','id');
+    $date_range_id = $request->input('date_range_id',0);
+
+    if($date_range_id == 0){
+      foreach ($date_ranges as $key => $value) {
+        $date_range_id = $key ;
+        break ;
+      }
+      return redirect($shop_url.'/monthly-salary?date_range_id=' . $date_range_id);
+    }
+    $date_range = DateRange::find($date_range_id);
+
+    $task = Option::byOptionType('employee1_task_monthly')->first();
+    $task_list = Option::whereIn('id',explode(',', $task->name))->orderBy('ordering','asc')->get() ;
+
+    $employees = Employee::byType1()->orderBy('name','asc')->get();
+    $employee_ids = array();
+    foreach($employees as $employee){
+      $employee_ids[] = $employee->id ;
+    }
+
+    $daily_jobs = DailyJob::where('task_at','>',$date_range->start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee_ids)->whereIn('task_id',explode(',', $task->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
+
+    $results = array();
+    $grand_total = 0 ;
+    foreach($employees as $employee){
+      $data = array() ;
+      $data['employee'] = $employee ;
+
+      $data['summary_amount'] = 0 ;
+      $data['summary_percent'] = 0 ;
+      foreach($task_list as $task){
+        $data['data'][$task->id] = array('amount' => 0 , 'percent' => 0);
+      }
+
+      foreach($daily_jobs as $daily_job){
+        if($daily_job->employee_id != $employee->id){
+          continue ;
+        }
+        $data['data'][$daily_job->task_id]['amount'] += $daily_job->amount ;
+        $data['summary_amount'] += $daily_job->amount ;
+      }
+
+      #calculate percent ;
+      foreach($data['data'] as $task_id => &$value){
+        $task_percent = TaskPercent::byTask($task_id)->first();
+        if(is_null($task_percent)){
+          $value['percent'] = 0 ;
+        }else{
+          $value['percent'] += $value['amount'] * $task_percent->percent / 100 ;
+        }
+        $data['summary_percent'] += $value['percent'];
+      }
+      $data['salary'] = ( $employee->base_salary / 2 ) +  $data['summary_percent'] ;
+      $data['total_receive'] = $data['salary'];
+      $grand_total += $data['total_receive'];
+
+      $results[] = $data ;
+    }
+
+    $employees2 = Employee::byType2()->orderBy('name','asc')->get();
+    $results2 = array();
+    $grand_total2 = 0 ;
+    foreach($employees2 as $employee){
+      $data = array() ;
+      $data['employee'] = $employee ;
+      $data['salary'] = ( $employee->base_salary / 2 ) ;
+      $data['total_receive'] = $data['salary'];
+      $grand_total2 += $data['total_receive'];
+
+      $results2[] = $data ;
+    }
+
+    return view('shop.monthly-summary.salary')->with('shop_url',$shop_url)->with('date_ranges',$date_ranges)->with('date_range_id',$date_range_id)->with('results',$results)->with('grand_total',$grand_total)->with('results2',$results2)->with('grand_total2',$grand_total2);
+  }
 }
