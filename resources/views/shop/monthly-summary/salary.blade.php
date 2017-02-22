@@ -36,6 +36,9 @@
 						<th>ยอด/เงินเดือน</th>
 						<th>20%</th>
 						<th>&nbsp;</th>
+						@if($second_period)
+						<th>ค่าปรับ</th>
+						@endif
 						<th>เบิก</th>
 						<th>กู้</th>
 						<th>รับสุทธิ</th>
@@ -48,6 +51,9 @@
 						<td class="text-right">{{ number_format($result['salary']) }}</td>
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
+						@if($second_period)
+						<td class="text-right">{{ number_format($result['fine']) }}</td>
+						@endif
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<td class="text-right">{{ number_format($result['total_receive']) }}</td>
@@ -60,6 +66,9 @@
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
+						@if($second_period)
+						<td>&nbsp;</td>
+						@endif
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<td class="text-right">{{ number_format($grand_total) }}</td>
@@ -77,6 +86,9 @@
 						<th>เงินเดือน</th>
 						<th>ครึ่งเดือน</th>
 						<th>เปอร์เซ็นต์</th>
+						@if($second_period)
+						<th>ค่าปรับ</th>
+						@endif
 						<th>เบิก</th>
 						<th>กู้</th>
 						<th>รับสุทธิ</th>
@@ -89,6 +101,9 @@
 						<td class="text-right">{{ number_format($result['employee']->base_salary) }}</td>
 						<td class="text-right">{{ number_format($result['salary']) }}</td>
 						<td>&nbsp;</td>
+						@if($second_period)
+						<td class="text-right">{{ number_format($result['fine']) }}</td>
+						@endif
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<td class="text-right">{{ number_format($result['total_receive']) }}</td>
@@ -101,6 +116,9 @@
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
+						@if($second_period)
+						<td>&nbsp;</td>
+						@endif
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<td class="text-right">{{ number_format($grand_total2) }}</td>

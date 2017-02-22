@@ -193,6 +193,21 @@ class MonthlyReportController extends Controller{
 
     $daily_jobs = DailyJob::where('task_at','>',$date_range->start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee_ids)->whereIn('task_id',explode(',', $task->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
 
+    $second_period = false ;
+    if($date_range->start_date->format('d') == 15){
+      $second_period = true ;
+    }
+
+    $daily_fine_jobs = [] ;
+    if($second_period){
+      $task_fine = Option::byOptionType('task_fine')->first();
+      $new_start_date = $date_range->end_date->copy()->subMonth() ;
+      $daily_fine_jobs = DailyJob::where('task_at','>',$new_start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee_ids)->whereIn('task_id',explode(',', $task_fine->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
+    }
+
+
+
+
     $results = array();
     $grand_total = 0 ;
     foreach($employees as $employee){
@@ -201,6 +216,7 @@ class MonthlyReportController extends Controller{
 
       $data['summary_amount'] = 0 ;
       $data['summary_percent'] = 0 ;
+      $data['fine'] = 0 ;
       foreach($task_list as $task){
         $data['data'][$task->id] = array('amount' => 0 , 'percent' => 0);
       }
@@ -211,6 +227,13 @@ class MonthlyReportController extends Controller{
         }
         $data['data'][$daily_job->task_id]['amount'] += $daily_job->amount ;
         $data['summary_amount'] += $daily_job->amount ;
+      }
+
+      foreach($daily_fine_jobs as $daily_job){
+        if($daily_job->employee_id != $employee->id){
+          continue ;
+        }
+        $data['fine'] += $daily_job->amount ;
       }
 
       #calculate percent ;
@@ -224,7 +247,10 @@ class MonthlyReportController extends Controller{
         $data['summary_percent'] += $value['percent'];
       }
       $data['salary'] = ( $employee->base_salary / 2 ) +  $data['summary_percent'] ;
-      $data['total_receive'] = $data['salary'];
+      if($second_period)
+        $data['total_receive'] = $data['salary'] + $data['fine'];
+      else
+        $data['total_receive'] = $data['salary'] ;
       $grand_total += $data['total_receive'];
 
       $results[] = $data ;
@@ -232,17 +258,43 @@ class MonthlyReportController extends Controller{
 
     $employees2 = Employee::byType2()->orderBy('name','asc')->get();
     $results2 = array();
+
+    $employee2_ids = array();
+    foreach($employees2 as $employee){
+      $employee2_ids[] = $employee->id ;
+    }
+
+    $daily_fine2_jobs = [] ;
+    if($second_period){
+      $task_fine = Option::byOptionType('task_fine')->first();
+      $new_start_date = $date_range->end_date->copy()->subMonth() ;
+      $daily_fine2_jobs = DailyJob::where('task_at','>',$new_start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee2_ids)->whereIn('task_id',explode(',', $task_fine->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
+    }
+
     $grand_total2 = 0 ;
     foreach($employees2 as $employee){
       $data = array() ;
       $data['employee'] = $employee ;
       $data['salary'] = ( $employee->base_salary / 2 ) ;
+      $data['fine'] = 0 ;
+
+      foreach($daily_fine2_jobs as $daily_job){
+        if($daily_job->employee_id != $employee->id){
+          continue ;
+        }
+        $data['fine'] += $daily_job->amount ;
+      }
+
+
       $data['total_receive'] = $data['salary'];
+      if($second_period){
+        $data['total_receive'] += $data['fine'] ;
+      }
       $grand_total2 += $data['total_receive'];
 
       $results2[] = $data ;
     }
 
-    return view('shop.monthly-summary.salary')->with('shop_url',$shop_url)->with('date_ranges',$date_ranges)->with('date_range_id',$date_range_id)->with('results',$results)->with('grand_total',$grand_total)->with('results2',$results2)->with('grand_total2',$grand_total2);
+    return view('shop.monthly-summary.salary')->with('shop_url',$shop_url)->with('date_ranges',$date_ranges)->with('date_range_id',$date_range_id)->with('results',$results)->with('grand_total',$grand_total)->with('results2',$results2)->with('grand_total2',$grand_total2)->with('second_period',$second_period);
   }
 }
