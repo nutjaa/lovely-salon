@@ -45,7 +45,7 @@
 						<tr>
 							@foreach($employee_queue_ids as $employee_queue_id)
 								@if(isset($row[$employee_queue_id]))
-									<td class="task-col @if($row[$employee_queue_id]->is_loyal_customer) success @endif " data-id="{{ $row[$employee_queue_id]->id }}">
+									<td class="task-col @if($row[$employee_queue_id]->is_loyal_customer) success @endif @if($row[$employee_queue_id]->amount < 0) warning @endif" data-id="{{ $row[$employee_queue_id]->id }}">
 										<table width="100%" >
 											<tr>
 												<td width="50%">{!! $row[$employee_queue_id]->task->name !!}</td>
