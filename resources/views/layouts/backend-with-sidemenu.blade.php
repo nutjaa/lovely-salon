@@ -61,6 +61,13 @@
                 <span class="arrow"></span>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ url($shop_url . '/monthly-fine') }}" class="nav-link ">
+                <i class="icon-notebook"></i>
+                <span class="title">{{ trans('side-bar.monthly-fine') }}</span>
+                <span class="arrow"></span>
+            </a>
+        </li>
         <li class="heading">
             <h3 class="uppercase">Settings</h3>
         </li>

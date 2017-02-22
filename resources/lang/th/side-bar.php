@@ -7,5 +7,6 @@ return [
 	'monthly' => 'รายเดือน',
 	'monthly-all-employee1' => 'ใบรายงานช่างซอย(รวม)',
 	'monthly-single-employee1' => 'ใบรายงานช่างซอย(เดี่ยว)',
-	'monthly-salary' => 'สรุปเงินเดือน'
+	'monthly-salary' => 'สรุปเงินเดือน',
+	'monthly-fine' => 'ค่าปรับ'
 ];
