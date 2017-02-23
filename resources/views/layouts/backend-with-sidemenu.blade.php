@@ -55,6 +55,20 @@
             </a>
         </li>
         <li class="nav-item">
+            <a href="{{ url($shop_url . '/monthly-all-employee2') }}" class="nav-link ">
+                <i class="icon-notebook"></i>
+                <span class="title">{{ trans('side-bar.monthly-all-employee2') }}</span>
+                <span class="arrow"></span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ url($shop_url . '/monthly-single-employee2') }}" class="nav-link ">
+                <i class="icon-notebook"></i>
+                <span class="title">{{ trans('side-bar.monthly-single-employee2') }}</span>
+                <span class="arrow"></span>
+            </a>
+        </li>
+        <li class="nav-item">
             <a href="{{ url($shop_url . '/monthly-salary') }}" class="nav-link ">
                 <i class="icon-notebook"></i>
                 <span class="title">{{ trans('side-bar.monthly-salary') }}</span>

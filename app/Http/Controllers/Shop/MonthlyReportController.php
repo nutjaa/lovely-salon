@@ -169,6 +169,91 @@ class MonthlyReportController extends Controller{
 
   }
 
+  public function all2(Request $request , $shop_url){
+    $monthly_select_id = $request->input('monthly_select_id',0);
+    $date = Carbon::now();
+    $monthly_selector = [] ;
+    while($date->format('Y') >= 2017 ){
+      $monthly_selector[$date->format('Y-m-01')] = $date->format('F Y') ;
+      $date->subMonth() ;
+    }
+
+    if($monthly_select_id == 0){
+      foreach ($monthly_selector as $key => $value) {
+        $monthly_select_id = $key ;
+        break ;
+      }
+      return redirect($shop_url.'/monthly-all-employee2?monthly_select_id=' . $monthly_select_id);
+    }
+
+    $task = Option::byOptionType('employee2_task_monthly')->first();
+    $task_list = Option::whereIn('id',explode(',', $task->name))->orderBy('ordering','asc')->get() ;
+
+    $employees = Employee::byType2()->orderBy('name','asc')->get();
+    $employee_ids = array();
+    foreach($employees as $employee){
+      $employee_ids[] = $employee->id ;
+    }
+
+    $start_date = Carbon::createFromFormat('Y-m-d H',$monthly_select_id . ' 0');
+    $end_date = Carbon::createFromFormat('Y-m-d H',$monthly_select_id . ' 0');
+    $end_date->addMonth();
+
+    $start_date->setTimezone('Asia/Bangkok');
+    $end_date->setTimezone('Asia/Bangkok');
+
+    $daily_jobs = DailyJob::where('task_at','>',$start_date)->where('task_at','<',$end_date)->whereIn('employee_id',$employee_ids)->whereIn('task_id',explode(',', $task->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
+
+    $results = array();
+    foreach($employees as $employee){
+      $data = array() ;
+      $data['employee'] = $employee ;
+      $data['data'] = array() ;
+      $data['summary_count'] = 0 ;
+      $data['summary_amount'] = 0 ;
+      $data['summary_percent'] = 0 ;
+      foreach($task_list as $task){
+        $data['data'][$task->id] = array('count' => 0 , 'amount' => 0 , 'percent' => 0);
+      }
+
+      foreach($daily_jobs as $daily_job){
+        if($daily_job->employee_id != $employee->id){
+          continue ;
+        }
+        $data['data'][$daily_job->task_id]['count']++ ;
+        $data['data'][$daily_job->task_id]['amount'] += $daily_job->amount ;
+        $data['summary_amount'] += $daily_job->amount ;
+        $data['summary_count']++ ;
+      }
+
+      #calculate percent ;
+      foreach($data['data'] as $task_id => &$value){
+        $value['percent'] += $value['amount'] * 10 / 100 ;
+        $data['summary_percent'] += $value['percent'];
+      }
+
+
+      $results[] = $data ;
+    }
+
+
+    $summary_by_task = array() ;
+    $summary_by_task['all'] = 0 ;
+    foreach($task_list as $task){
+      $summary_by_task[$task->id] = 0;
+    }
+
+    foreach($results as $result){
+      foreach($result['data'] as $task_id => $value){
+        $summary_by_task[$task_id] += $value['percent'];
+        $summary_by_task['all'] += $value['percent'];
+      }
+    }
+
+
+    return view('shop.monthly-summary.all2')->with('shop_url',$shop_url)->with('monthly_selector',$monthly_selector)->with('monthly_select_id',$monthly_select_id)->with('task_list',$task_list)->with('results',$results)->with('summary_by_task',$summary_by_task);
+  }
+
   public function salary(Request $request , $shop_url){
     $date_ranges = DateRange::orderBy('start_date','desc')->pluck('name','id');
     $date_range_id = $request->input('date_range_id',0);
