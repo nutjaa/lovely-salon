@@ -426,6 +426,8 @@ class MonthlyReportController extends Controller{
       $results[] = $data ;
     }
 
+    ######### EMPLOYEE TYPE 2
+
     $employees2 = Employee::byType2()->orderBy('name','asc')->get();
     $results2 = array();
 
@@ -434,11 +436,18 @@ class MonthlyReportController extends Controller{
       $employee2_ids[] = $employee->id ;
     }
 
+    $task_list = Option::whereIn('id',explode(',', $task->name))->orderBy('ordering','asc')->get() ;
+
     $daily_fine2_jobs = [] ;
+    $daily_percent = [] ;
     if($second_period){
       $task_fine = Option::byOptionType('task_fine')->first();
       $new_start_date = $date_range->end_date->copy()->subMonth() ;
       $daily_fine2_jobs = DailyJob::where('task_at','>',$new_start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee2_ids)->whereIn('task_id',explode(',', $task_fine->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
+
+      $task_employee2_monthly = Option::byOptionType('employee2_task_monthly')->first();
+
+      $daily_percent = DailyJob::where('task_at','>',$new_start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee2_ids)->whereIn('task_id',explode(',', $task_employee2_monthly->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
     }
 
     $grand_total2 = 0 ;
@@ -447,6 +456,8 @@ class MonthlyReportController extends Controller{
       $data['employee'] = $employee ;
       $data['salary'] = ( $employee->base_salary / 2 ) ;
       $data['fine'] = 0 ;
+      $data['summary_amount'] = 0 ;
+      $data['summary_percent'] = 0 ;
 
       foreach($daily_fine2_jobs as $daily_job){
         if($daily_job->employee_id != $employee->id){
@@ -455,10 +466,20 @@ class MonthlyReportController extends Controller{
         $data['fine'] += $daily_job->amount ;
       }
 
+      if($second_period){
+        foreach($daily_percent as $daily_job){
+          if($daily_job->employee_id != $employee->id){
+            continue ;
+          }
+          $data['summary_amount'] += $daily_job->amount ;
+        }
+        $data['summary_percent'] = $data['summary_amount'] * 10 / 100 ;
+      }
+
 
       $data['total_receive'] = $data['salary'];
       if($second_period){
-        $data['total_receive'] += $data['fine'] ;
+        $data['total_receive'] += $data['fine']  + $data['summary_percent'] ;
       }
       $grand_total2 += $data['total_receive'];
 
