@@ -28,6 +28,7 @@
     <link href="/assets/layouts/layout6/css/layout.min.css" rel="stylesheet" type="text/css" />
     <link href="/assets/layouts/layout6/css/custom.min.css" rel="stylesheet" type="text/css" />
     <!-- END THEME LAYOUT STYLES -->
+    @include('shared.fav')
 
     @section('page-level-styles')
     @show

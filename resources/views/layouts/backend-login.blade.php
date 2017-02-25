@@ -28,6 +28,8 @@
     <!-- BEGIN PAGE LEVEL STYLES -->
     <link href="/assets/pages/css/login-2.min.css" rel="stylesheet" type="text/css" />
     <!-- END PAGE LEVEL STYLES -->
+    @include('shared.fav')
+
 
     <body class="login">
     	@yield('content')
