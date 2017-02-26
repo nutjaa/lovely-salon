@@ -37,6 +37,7 @@
 						<th>20%</th>
 						<th>&nbsp;</th>
 						@if($second_period)
+						<th>สาย</th>
 						<th>ค่าปรับ</th>
 						@endif
 						<th>เบิก</th>
@@ -52,6 +53,7 @@
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						@if($second_period)
+						<td class="text-right">{{ number_format($result['late']) }}</td>
 						<td class="text-right">{{ number_format($result['fine']) }}</td>
 						@endif
 						<td>&nbsp;</td>
@@ -67,6 +69,7 @@
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						@if($second_period)
+						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						@endif
 						<td>&nbsp;</td>
@@ -89,6 +92,7 @@
 						@if($second_period)
 						<th>OT</th>
 						<th>เปอร์เซ็นต์</th>
+						<th>สาย</th>
 						<th>ค่าปรับ</th>
 						@endif
 						<th>เบิก</th>
@@ -106,6 +110,7 @@
 						@if($second_period)
 						<td class="text-right">{{ number_format($result['ot']) }}</td>
 						<td class="text-right">{{ number_format($result['summary_percent']) }}</td>
+						<td class="text-right">{{ number_format($result['late']) }}</td>
 						<td class="text-right">{{ number_format($result['fine']) }}</td>
 						@endif
 						<td>&nbsp;</td>
@@ -121,6 +126,7 @@
 						<td>&nbsp;</td>
 
 						@if($second_period)
+						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>

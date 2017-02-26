@@ -8,6 +8,7 @@ use App\Option ;
 use App\Employee;
 use App\DailyJob;
 use App\TaskPercent ;
+use App\Company;
 
 use Carbon\Carbon ;
 
@@ -340,6 +341,8 @@ class MonthlyReportController extends Controller{
   }
 
   public function salary(Request $request , $shop_url){
+    $company = Company::byUrl($shop_url)->first() ;
+
     $date_ranges = DateRange::orderBy('start_date','desc')->pluck('name','id');
     $date_range_id = $request->input('date_range_id',0);
 
@@ -369,10 +372,15 @@ class MonthlyReportController extends Controller{
     }
 
     $daily_fine_jobs = [] ;
+    $daily_late_jobs = [] ;
     if($second_period){
       $task_fine = Option::byOptionType('task_fine')->first();
       $new_start_date = $date_range->end_date->copy()->subMonth() ;
       $daily_fine_jobs = DailyJob::where('task_at','>',$new_start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee_ids)->whereIn('task_id',explode(',', $task_fine->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
+
+      $task_late = Option::byOptionType('late_task_list')->first();
+      $daily_late_jobs = DailyJob::where('task_at','>',$new_start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee_ids)->whereIn('task_id',explode(',', $task_late->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
+
     }
 
 
@@ -387,6 +395,7 @@ class MonthlyReportController extends Controller{
       $data['summary_amount'] = 0 ;
       $data['summary_percent'] = 0 ;
       $data['fine'] = 0 ;
+      $data['late'] = 0 ;
       foreach($task_list as $task){
         $data['data'][$task->id] = array('amount' => 0 , 'percent' => 0);
       }
@@ -406,6 +415,13 @@ class MonthlyReportController extends Controller{
         $data['fine'] += $daily_job->amount ;
       }
 
+      foreach($daily_late_jobs as $daily_job){
+        if($daily_job->employee_id != $employee->id){
+          continue ;
+        }
+        $data['late'] += $daily_job->amount ;
+      }
+
       #calculate percent ;
       foreach($data['data'] as $task_id => &$value){
         $task_percent = TaskPercent::byTask($task_id)->first();
@@ -418,7 +434,7 @@ class MonthlyReportController extends Controller{
       }
       $data['salary'] = ( $employee->base_salary / 2 ) +  $data['summary_percent'] ;
       if($second_period)
-        $data['total_receive'] = $data['salary'] + $data['fine'];
+        $data['total_receive'] = $data['salary'] + $data['fine'] + $data['late'];
       else
         $data['total_receive'] = $data['salary'] ;
       $grand_total += $data['total_receive'];
@@ -451,6 +467,9 @@ class MonthlyReportController extends Controller{
 
       $task_ot = Option::byOptionType('ot_task_list')->first();
       $daily_ot_jobs = DailyJob::where('task_at','>',$new_start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee2_ids)->whereIn('task_id',explode(',', $task_ot->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
+
+      $task_late = Option::byOptionType('late_task_list')->first();
+      $daily_late_jobs = DailyJob::where('task_at','>',$new_start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee2_ids)->whereIn('task_id',explode(',', $task_late->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
     }
 
     $grand_total2 = 0 ;
@@ -462,6 +481,7 @@ class MonthlyReportController extends Controller{
       $data['summary_amount'] = 0 ;
       $data['summary_percent'] = 0 ;
       $data['ot'] = 0 ;
+      $data['late'] = 0 ;
 
       foreach($daily_fine2_jobs as $daily_job){
         if($daily_job->employee_id != $employee->id){
@@ -475,6 +495,13 @@ class MonthlyReportController extends Controller{
           continue ;
         }
         $data['ot'] += $daily_job->amount ;
+      }
+
+      foreach($daily_late_jobs as $daily_job){
+        if($daily_job->employee_id != $employee->id){
+          continue ;
+        }
+        $data['late'] += $daily_job->amount ;
       }
 
 
@@ -491,7 +518,7 @@ class MonthlyReportController extends Controller{
 
       $data['total_receive'] = $data['salary'];
       if($second_period){
-        $data['total_receive'] += $data['fine'] + $data['ot']  + $data['summary_percent'] ;
+        $data['total_receive'] += $data['fine'] + $data['ot'] + $data['late'] + $data['summary_percent'] ;
       }
       $grand_total2 += $data['total_receive'];
 
