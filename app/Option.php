@@ -24,4 +24,8 @@ class Option extends Model
 	public function scopeByCompanyId($query,$company_id){
 		return $query->where('company_id',$company_id);
 	}
+
+	public function scopeByCompany($query,$company_id){
+		return $query->where('company_id',$company_id);
+	}
 }

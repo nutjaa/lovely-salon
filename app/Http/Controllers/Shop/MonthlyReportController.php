@@ -448,6 +448,9 @@ class MonthlyReportController extends Controller{
       $task_employee2_monthly = Option::byOptionType('employee2_task_monthly')->first();
 
       $daily_percent = DailyJob::where('task_at','>',$new_start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee2_ids)->whereIn('task_id',explode(',', $task_employee2_monthly->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
+
+      $task_ot = Option::byOptionType('ot_task_list')->first();
+      $daily_ot_jobs = DailyJob::where('task_at','>',$new_start_date)->where('task_at','<',$date_range->end_date)->whereIn('employee_id',$employee2_ids)->whereIn('task_id',explode(',', $task_ot->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
     }
 
     $grand_total2 = 0 ;
@@ -458,6 +461,7 @@ class MonthlyReportController extends Controller{
       $data['fine'] = 0 ;
       $data['summary_amount'] = 0 ;
       $data['summary_percent'] = 0 ;
+      $data['ot'] = 0 ;
 
       foreach($daily_fine2_jobs as $daily_job){
         if($daily_job->employee_id != $employee->id){
@@ -465,6 +469,14 @@ class MonthlyReportController extends Controller{
         }
         $data['fine'] += $daily_job->amount ;
       }
+
+      foreach($daily_ot_jobs as $daily_job){
+        if($daily_job->employee_id != $employee->id){
+          continue ;
+        }
+        $data['ot'] += $daily_job->amount ;
+      }
+
 
       if($second_period){
         foreach($daily_percent as $daily_job){
@@ -479,7 +491,7 @@ class MonthlyReportController extends Controller{
 
       $data['total_receive'] = $data['salary'];
       if($second_period){
-        $data['total_receive'] += $data['fine']  + $data['summary_percent'] ;
+        $data['total_receive'] += $data['fine'] + $data['ot']  + $data['summary_percent'] ;
       }
       $grand_total2 += $data['total_receive'];
 

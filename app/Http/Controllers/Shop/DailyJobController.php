@@ -15,6 +15,7 @@ Use DB;
 
 class DailyJobController extends Controller{
 	public function index(Request $request , $shop_url){
+    $company = Company::byUrl($shop_url)->first() ;
 		$selected_date = $request->input('date',Carbon::today()->toDateString());
     #DB::enableQueryLog();
     $queue_customers = DailyJob::byTaskDate($selected_date)->byNoAmount()->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
@@ -57,7 +58,10 @@ class DailyJobController extends Controller{
       }
     }
 
-		return view('shop.daily_job.index')->with('shop_url',$shop_url)->with('selected_date',$selected_date)->with('queue_employees',$show_queue_employees)->with('rows',$rows)->with('employee_queue_ids',$employee_queue_ids)->with('summary',$summary);
+    $ot_task = Option::byOptionType('ot_task_list')->byCompany($company->id)->first();
+    $ot_task = explode(',',$ot_task->name);
+
+		return view('shop.daily_job.index')->with('shop_url',$shop_url)->with('selected_date',$selected_date)->with('queue_employees',$show_queue_employees)->with('rows',$rows)->with('employee_queue_ids',$employee_queue_ids)->with('summary',$summary)->with('ot_task',$ot_task);
 	}
 
   private function createEmployeeList(Request $request,$shop_url){

@@ -87,6 +87,7 @@
 						<th>ครึ่งเดือน</th>
 
 						@if($second_period)
+						<th>OT</th>
 						<th>เปอร์เซ็นต์</th>
 						<th>ค่าปรับ</th>
 						@endif
@@ -103,6 +104,7 @@
 						<td class="text-right">{{ number_format($result['salary']) }}</td>
 
 						@if($second_period)
+						<td class="text-right">{{ number_format($result['ot']) }}</td>
 						<td class="text-right">{{ number_format($result['summary_percent']) }}</td>
 						<td class="text-right">{{ number_format($result['fine']) }}</td>
 						@endif
@@ -119,6 +121,7 @@
 						<td>&nbsp;</td>
 
 						@if($second_period)
+						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						<td>&nbsp;</td>
 						@endif
