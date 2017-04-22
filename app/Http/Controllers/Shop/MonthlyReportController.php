@@ -482,28 +482,28 @@ class MonthlyReportController extends Controller{
       $data['summary_percent'] = 0 ;
       $data['ot'] = 0 ;
       $data['late'] = 0 ;
-
-      foreach($daily_fine2_jobs as $daily_job){
-        if($daily_job->employee_id != $employee->id){
-          continue ;
+      if($second_period){
+        foreach($daily_fine2_jobs as $daily_job){
+          if($daily_job->employee_id != $employee->id){
+            continue ;
+          }
+          $data['fine'] += $daily_job->amount ;
         }
-        $data['fine'] += $daily_job->amount ;
-      }
 
-      foreach($daily_ot_jobs as $daily_job){
-        if($daily_job->employee_id != $employee->id){
-          continue ;
+        foreach($daily_ot_jobs as $daily_job){
+          if($daily_job->employee_id != $employee->id){
+            continue ;
+          }
+          $data['ot'] += $daily_job->amount ;
         }
-        $data['ot'] += $daily_job->amount ;
-      }
 
-      foreach($daily_late_jobs as $daily_job){
-        if($daily_job->employee_id != $employee->id){
-          continue ;
+        foreach($daily_late_jobs as $daily_job){
+          if($daily_job->employee_id != $employee->id){
+            continue ;
+          }
+          $data['late'] += $daily_job->amount ;
         }
-        $data['late'] += $daily_job->amount ;
       }
-
 
       if($second_period){
         foreach($daily_percent as $daily_job){
