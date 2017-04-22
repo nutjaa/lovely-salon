@@ -53,6 +53,9 @@ class DailySummaryController extends Controller{
         if($daily_job->employee_id != $employee->id){
           continue ;
         }
+        if(!isset($data['data'][$daily_job->task_id])){
+          continue;
+        }
         $data['data'][$daily_job->task_id]['count']++ ;
         $data['data'][$daily_job->task_id]['amount'] += $daily_job->amount ;
         $data['summary'] += $daily_job->amount ;
@@ -67,6 +70,9 @@ class DailySummaryController extends Controller{
     }
 
     foreach($daily_jobs as $daily_job){
+      if(!isset($summary_by_task[$daily_job->task_id])){
+        continue;
+      }
       $summary_by_task[$daily_job->task_id] += $daily_job->amount;
       $summary_by_task['all'] += $daily_job->amount;
     }
