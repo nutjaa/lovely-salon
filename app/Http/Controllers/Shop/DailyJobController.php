@@ -108,6 +108,7 @@ class DailyJobController extends Controller{
 
   public function store(Request $request , $shop_url){
 
+
   	$this->validate($request, [
         'employee_id' => 'required',
         'task_id' => 'required'
@@ -148,6 +149,11 @@ class DailyJobController extends Controller{
   	}
 
   	$daily_job->save();
+
+    $save_new = $request->input('save_new');
+    if($save_new){
+      return redirect($shop_url.'/daily-jobs/create?task_at='.$daily_job->task_at->toDateString().'&employee_id='.$daily_job->employee_id)->with('status', trans('daily-task.success-message') );
+    }
 
   	return redirect($shop_url.'/daily-jobs?date='.$daily_job->task_at->toDateString())->with('status', trans('daily-task.success-message') );
   }

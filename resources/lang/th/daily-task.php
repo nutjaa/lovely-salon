@@ -4,6 +4,7 @@ return [
 	'create-new' => 'สร้างใบงาน',
 	'edit' => 'แก้ไขใบงาน',
 	'save' => 'บันทึก',
+	'save-and-create-new' => 'บันทึก และ สร้างใบงานใหม่',
 	'cancel' => 'ยกเลิก',
 	'delete' => 'ลบใบงาน',
 	'employee' => 'พนักงาน',

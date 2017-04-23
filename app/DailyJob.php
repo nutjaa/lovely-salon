@@ -27,6 +27,7 @@ class DailyJob extends Model{
 	/***** SCOPE ***/
 	public function scopeByTaskDate($query,$task_at){
 		$date = new Carbon($task_at);
+		$date->setTimezone('Asia/Bangkok');
 		return $query->where('task_at','>=' , $date->toDateString() )->where('task_at','<',$date->addDay()->toDateString()) ;
 	}
 	public function scopeByNoAmount($query){

@@ -106,6 +106,7 @@
         <div class="form-actions fluid">
           <div class="row">
             <div class="col-md-offset-2 col-md-10">
+              <button type="submit" class="btn green" value="1" name="save_new">{{ trans('daily-task.save-and-create-new') }}</button>
               <button type="submit" class="btn green">{{ trans('daily-task.save') }}</button>
               <a href="{{ url($shop_url . '/daily-jobs?date='.$daily_job->task_at->toDateString()) }}" class="btn default">{{ trans('daily-task.cancel') }}</a>
             </div>
