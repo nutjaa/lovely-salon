@@ -33,7 +33,7 @@
 				{{ Form::select('employee_type', $employee_types , $employee_type , ['class' => 'form-control' ,'name' => 'employee_type']) }}
 			</div>
 			<div class="col-md-2">
-				<a href="/olympic-salon/daily-summary/export?date={{$selected_date}}&employee_type={{$employee_type}}" class="btn green">Export</a>
+				<a href="/{{$shop_url}}/daily-summary/export?date={{$selected_date}}&employee_type={{$employee_type}}" class="btn green">Export</a>
 			</div>
 		</div>
 		</form>

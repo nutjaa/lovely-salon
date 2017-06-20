@@ -16,6 +16,7 @@
       <span class="caption-subject font-green sbold uppercase"> {{ trans('breadcrumb.monthly-salary') }} </span>
     </div>
     <div class="actions">
+    	<a href="/{{$shop_url}}/monthly-salary/export?date_range_id={{$date_range_id}}" class="btn green">Export</a>
     </div>
 	</div>
 	<div class="portlet-body">

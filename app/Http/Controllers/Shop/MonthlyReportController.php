@@ -848,19 +848,7 @@ class MonthlyReportController extends Controller{
     });
   }
 
-  public function salary(Request $request , $shop_url){
-    $company = Company::byUrl($shop_url)->first() ;
-
-    $date_ranges = DateRange::orderBy('start_date','desc')->pluck('name','id');
-    $date_range_id = $request->input('date_range_id',0);
-
-    if($date_range_id == 0){
-      foreach ($date_ranges as $key => $value) {
-        $date_range_id = $key ;
-        break ;
-      }
-      return redirect($shop_url.'/monthly-salary?date_range_id=' . $date_range_id);
-    }
+  private function processSalary($date_range_id){
     $date_range = DateRange::find($date_range_id);
 
     $task = Option::byOptionType('employee1_task_monthly')->first();
@@ -1032,7 +1020,237 @@ class MonthlyReportController extends Controller{
 
       $results2[] = $data ;
     }
+    return [
+      'results' => $results ,
+      'results2' => $results2 ,
+      'grand_total' => $grand_total ,
+      'grand_total2' => $grand_total2 ,
+      'second_period' => $second_period
+    ];
+  }
 
-    return view('shop.monthly-summary.salary')->with('shop_url',$shop_url)->with('date_ranges',$date_ranges)->with('date_range_id',$date_range_id)->with('results',$results)->with('grand_total',$grand_total)->with('results2',$results2)->with('grand_total2',$grand_total2)->with('second_period',$second_period);
+  public function salary(Request $request , $shop_url){
+    $company = Company::byUrl($shop_url)->first() ;
+
+    $date_ranges = DateRange::orderBy('start_date','desc')->pluck('name','id');
+    $date_range_id = $request->input('date_range_id',0);
+
+    if($date_range_id == 0){
+      foreach ($date_ranges as $key => $value) {
+        $date_range_id = $key ;
+        break ;
+      }
+      return redirect($shop_url.'/monthly-salary?date_range_id=' . $date_range_id);
+    }
+
+    $data = $this->processSalary($date_range_id);
+
+    return view('shop.monthly-summary.salary')->with('shop_url',$shop_url)->with('date_ranges',$date_ranges)->with('date_range_id',$date_range_id)->with('results',$data['results'])->with('grand_total',$data['grand_total'])->with('results2',$data['results2'])->with('grand_total2',$data['grand_total2'])->with('second_period',$data['second_period']);
+  }
+
+  public function salaryExport(Request $request , $shop_url){
+    $date_range_id = $request->input('date_range_id',0);
+    $data = $this->processSalary($date_range_id);
+    $date_range = DateRange::find($date_range_id);
+    $data['date_range'] = $date_range ;
+    Excel::create('monthly-salary-' . $date_range->start_date->format('Y-m-d') . '-' . $date_range->end_date->format('Y-m-d'), function($excel) use ($data){
+      $excel->sheet('export', function($sheet) use ($data) {
+        $all_cols = ['A','B','C','D','E','F','G','H','I'];
+        $sheet->setOrientation('landscape');
+        $sheet->setWidth(array(
+          'A'=>9,'B'=>7,'C'=>7,'D'=>7,'E'=>7,'F'=>7,'G'=>7,'H'=>7,'I'=>7
+        ));
+        $sheet->cell('A1', function($cell) use ($data) {
+          $cell->setValue($data['date_range']->name);
+          $cell->setFontWeight('bold');
+        });
+        $sheet->cell('A3', function($cell) use ($data) {
+          $cell->setValue('ตารางสรุปเงินเดือน ช่างซอย');
+          $cell->setFontWeight('bold');
+        });
+        $sheet->mergeCells('A1:E1');
+        $sheet->mergeCells('A3:E3');
+
+        // header
+        $header = [] ;
+        $header[] = 'ฃื่อพนัก' ;
+        $header[] = 'ยอด/เงินเดือน';
+        $header[] = '20%';
+        $header[] = '';
+        if($data['second_period']){
+          $header[] = 'สาย';
+          $header[] = 'ค่าปรับ';
+        }
+        $header[] = 'เบิก';
+        $header[] = 'กู้';
+        $header[] = 'รับสุทธิ';
+        $sheet->row(5,$header);
+        $sheet->cells('A5:I5', function($cells) {
+          $cells->setAlignment('left');
+          $cells->setFontWeight('bold');
+        });
+
+        // data
+        $row_index = 6 ;
+        foreach($data['results'] as $result){
+          $row_data = [] ;
+          $row_data[] = $result['employee']->name ;
+          $row_data[] = number_format($result['salary']) ;
+          $row_data[] = '';
+          $row_data[] = '';
+          if($data['second_period']){
+            $row_data[] = number_format($result['late']) ;
+            $row_data[] = number_format($result['fine']) ;
+          }
+          $row_data[] = '' ;
+          $row_data[] = '' ;
+          $row_data[] = number_format($result['total_receive']);
+
+          $sheet->row($row_index,$row_data);
+
+          $sheet->cells('B'.$row_index.':i'.$row_index, function($cells) {
+            $cells->setAlignment('right');
+          });
+
+          $row_index++ ;
+        }
+
+         // Last row
+
+
+        $last_row = [] ;
+        $last_row[] = 'รวม' ;
+        $last_row[] = '' ;
+        $last_row[] = '' ;
+        $last_row[] = '' ;
+        if($data['second_period']){
+          $last_row[] = '' ;
+          $last_row[] = '' ;
+        }
+        $last_row[] = '' ;
+        $last_row[] = '' ;
+        $last_row[] = number_format($data['grand_total']);
+
+        $sheet->row($row_index,$last_row);
+
+        $sheet->cells('B'.$row_index.':i'.$row_index, function($cells) {
+          $cells->setAlignment('right');
+          $cells->setFontWeight('bold');
+        });
+
+        $sheet->cell('A'.$row_index, function($cell) {
+          $cell->setFontWeight('bold');
+        });
+
+
+
+        $sheet->setHeight(1, 20);
+        $sheet->setHeight(3, 20);
+
+        for($i = 5 ; $i <= $row_index ; $i++){
+          $sheet->setHeight($i, 20);
+          foreach($all_cols as $col){
+            $sheet->setBorder($col.$i, 'thin');
+          }
+        }
+
+        $row_index = $row_index+2;
+
+        $all_cols = ['A','B','C','D','E','F','G','H','I','J'];
+
+        $sheet->cell('A'.$row_index, function($cell) use ($data) {
+          $cell->setValue('ตารางสรุปเงินเดือนพนักงาน ผู้ช่วยช่าง');
+          $cell->setFontWeight('bold');
+        });
+        $sheet->mergeCells('A'.$row_index.':E'.$row_index);
+        $sheet->setHeight($row_index, 20);
+        $row_index = $row_index + 2 ;
+
+        // header
+        $header = [] ;
+        $header[] = 'ฃื่อพนัก' ;
+        $header[] = 'เงินเดือน';
+        $header[] = 'ครึ่งเดือน';
+        if($data['second_period']){
+          $header[] = 'OT';
+          $header[] = 'เปอร์เซ็นต์';
+          $header[] = 'สาย';
+          $header[] = 'ค่าปรับ';
+        }
+        $header[] = 'เบิก';
+        $header[] = 'กู้';
+        $header[] = 'รับสุทธิ';
+        $sheet->row($row_index,$header);
+        $sheet->cells('A'.$row_index.':J'.$row_index, function($cells) {
+          $cells->setAlignment('left');
+          $cells->setFontWeight('bold');
+        });
+        $sheet->setHeight($row_index, 20);
+        foreach($all_cols as $col){
+          $sheet->setBorder($col.$row_index, 'thin');
+        }
+        $row_index++;
+        foreach($data['results2'] as $result){
+          $row_data = [] ;
+          $row_data[] = $result['employee']->name ;
+          $row_data[] = number_format($result['employee']->base_salary);
+          $row_data[] = number_format($result['salary']);
+          if($data['second_period']){
+            $row_data[] = number_format($result['ot']) ;
+            $row_data[] = number_format($result['summary_percent']) ;
+            $row_data[] = number_format($result['late']) ;
+            $row_data[] = number_format($result['fine']) ;
+          }
+          $row_data[] = '' ;
+          $row_data[] = '' ;
+          $row_data[] = number_format($result['total_receive']);
+
+          $sheet->row($row_index,$row_data);
+
+          $sheet->cells('B'.$row_index.':J'.$row_index, function($cells) {
+            $cells->setAlignment('right');
+          });
+
+          $sheet->setHeight($row_index, 20);
+
+          foreach($all_cols as $col){
+            $sheet->setBorder($col.$row_index, 'thin');
+          }
+
+          $row_index++ ;
+        }
+
+        $last_row = [] ;
+        $last_row[] = 'รวม' ;
+        $last_row[] = '' ;
+        $last_row[] = '' ;
+        if($data['second_period']){
+          $last_row[] = '' ;
+          $last_row[] = '' ;
+          $last_row[] = '' ;
+          $last_row[] = '' ;
+        }
+        $last_row[] = '' ;
+        $last_row[] = '' ;
+        $last_row[] = number_format($data['grand_total2']);
+        $sheet->setHeight($row_index, 20);
+        foreach($all_cols as $col){
+          $sheet->setBorder($col.$row_index, 'thin');
+        }
+
+        $sheet->row($row_index,$last_row);
+
+        $sheet->cells('B'.$row_index.':J'.$row_index, function($cells) {
+          $cells->setAlignment('right');
+          $cells->setFontWeight('bold');
+        });
+
+        $sheet->cell('A'.$row_index, function($cell) {
+          $cell->setFontWeight('bold');
+        });
+
+
+      })->export('xls');
+    });
   }
 }

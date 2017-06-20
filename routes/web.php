@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth']], function () {
 		Route::get('monthly-single-employee2/export','Shop\MonthlyReportController@single2Export');
 
 		Route::get('monthly-salary','Shop\MonthlyReportController@salary');
+		Route::get('monthly-salary/export','Shop\MonthlyReportController@salaryExport');
 		Route::get('monthly-fine','Shop\MonthlyFineController@index');
 	});
 });
