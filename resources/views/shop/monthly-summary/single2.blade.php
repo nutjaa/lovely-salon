@@ -16,6 +16,7 @@
       <span class="caption-subject font-green sbold uppercase"> {{ trans('breadcrumb.monthly-summary-single2') }} </span>
     </div>
     <div class="actions">
+    	<a href="/olympic-salon/monthly-single-employee2/export?monthly_select_id={{$monthly_select_id}}&employee_id={{$employee_id}}" class="btn green">Export</a>
     </div>
 	</div>
 	<div class="portlet-body">
