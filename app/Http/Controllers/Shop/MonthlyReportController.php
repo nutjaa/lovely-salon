@@ -233,28 +233,7 @@ class MonthlyReportController extends Controller{
     });
   }
 
-  public function single1(Request $request , $shop_url){
-    $date_ranges = DateRange::orderBy('start_date','desc')->pluck('name','id');
-    $date_range_id = $request->input('date_range_id',0);
-    $employee_id = $request->input('employee_id',0);
-    if($date_range_id == 0){
-      foreach ($date_ranges as $key => $value) {
-        $date_range_id = $key ;
-        break ;
-      }
-      return redirect($shop_url.'/monthly-single-employee1?date_range_id=' . $date_range_id);
-    }
-
-    $employees = Employee::byType1()->orderBy('name','asc')->pluck('name','id');
-
-    if($employee_id == 0){
-      foreach($employees as $key => $employee){
-        $employee_id = $key ;
-        break;
-      }
-      return redirect($shop_url.'/monthly-single-employee1?date_range_id=' . $date_range_id . '&employee_id='.$employee_id);
-    }
-
+  private function processSingle1($employee_id,$date_range_id){
     $task = Option::byOptionType('employee1_task_monthly')->first();
     $task_list = Option::whereIn('id',explode(',', $task->name))->orderBy('ordering','asc')->get() ;
 
@@ -305,8 +284,146 @@ class MonthlyReportController extends Controller{
       }
     }
 
-    return view('shop.monthly-summary.single1')->with('shop_url',$shop_url)->with('date_ranges',$date_ranges)->with('date_range_id',$date_range_id)->with('employees',$employees)->with('employee_id',$employee_id)->with('task_list',$task_list)->with('results',$results)->with('summary_by_task',$summary_by_task);
+    return [
+      'task_list' => $task_list ,
+      'results' => $results ,
+      'summary_by_task' => $summary_by_task
+    ];
+  }
 
+  public function single1(Request $request , $shop_url){
+    $date_ranges = DateRange::orderBy('start_date','desc')->pluck('name','id');
+    $date_range_id = $request->input('date_range_id',0);
+    $employee_id = $request->input('employee_id',0);
+    if($date_range_id == 0){
+      foreach ($date_ranges as $key => $value) {
+        $date_range_id = $key ;
+        break ;
+      }
+      return redirect($shop_url.'/monthly-single-employee1?date_range_id=' . $date_range_id);
+    }
+
+    $employees = Employee::byType1()->orderBy('name','asc')->pluck('name','id');
+
+    if($employee_id == 0){
+      foreach($employees as $key => $employee){
+        $employee_id = $key ;
+        break;
+      }
+      return redirect($shop_url.'/monthly-single-employee1?date_range_id=' . $date_range_id . '&employee_id='.$employee_id);
+    }
+
+    $data = $this->processSingle1($employee_id , $date_range_id);
+
+    return view('shop.monthly-summary.single1')->with('shop_url',$shop_url)->with('date_ranges',$date_ranges)->with('date_range_id',$date_range_id)->with('employees',$employees)->with('employee_id',$employee_id)->with('task_list',$data['task_list'])->with('results',$data['results'])->with('summary_by_task',$data['summary_by_task']);
+
+  }
+
+  public function single1Export(Request $request , $shop_url){
+    $date_range_id = $request->input('date_range_id',0);
+    $employee_id = $request->input('employee_id',0);
+    $date_range = DateRange::find($date_range_id);
+    $employee = Employee::find($employee_id);
+
+    $data = $this->processSingle1($employee_id,$date_range_id);
+    $data['date_range'] = $date_range ;
+    $data['employee'] = $employee ;
+
+    Excel::create('monthly-single1-'.$employee->name.'-' . $date_range->start_date->format('Y-m-d') . '-' . $date_range->end_date->format('Y-m-d'), function($excel) use ($data){
+        $excel->sheet('export', function($sheet) use ($data) {
+        $all_cols = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W'];
+        $sheet->setOrientation('landscape');
+        $sheet->setWidth(array(
+          'A'=>6,'B'=>6,'C'=>6,'D'=>6,'E'=>6, 'F' => 6 , 'G' => 6 , 'H' => 6 , 'I' => 6 , 'J' => 6 , 'K' => 6 , 'L' => 6,'M'=>6,'N'=>6,'O'=>6,'P'=>6,'Q'=>6,'R'=>6,'S'=>6,'T'=>6,'U'=>6,'V'=>6,'W'=>6
+        ));
+        $sheet->cell('A1', function($cell) {
+          $cell->setValue('ใบรายงานพนักงาน(ช่างซอย)ประจำเดือน');
+          $cell->setFontWeight('bold');
+        });
+        $sheet->cell('F1', function($cell) use ($data) {
+          $cell->setValue($data['employee']->name);
+          $cell->setFontWeight('bold');
+        });
+        $sheet->cell('A2', function($cell) use ($data) {
+          $cell->setValue($data['date_range']->name);
+          $cell->setFontWeight('bold');
+        });
+        $sheet->mergeCells('A1:E1');
+        $sheet->mergeCells('A2:E2');
+
+        // header
+        $header = [] ;
+        $header[] = 'วันที่' ;
+        foreach($data['task_list'] as $task ){
+          $header[] = $task->name ;
+          $header[] = '';
+        }
+        $header[] = 'รวม';
+        $header[] = '';
+        $sheet->row(4,$header);
+        $merge_cells = ['B4:C4','D4:E4','F4:G4','H4:I4','J4:K4','L4:M4','N4:O4','P4:Q4','R4:S4','T4:U4','V4:W4'];
+        foreach($merge_cells as $merge_cell){
+          $sheet->mergeCells($merge_cell);
+        }
+
+        $sheet->cells('B4:W4', function($cells) {
+          $cells->setAlignment('center');
+          $cells->setFontWeight('bold');
+        });
+
+        $sheet->cell('A4', function($cell) {
+          $cell->setFontWeight('bold');
+        });
+
+
+        // data
+        $row_index = 5 ;
+        foreach($data['results'] as $result){
+          $row_data = [] ;
+          $row_data[] = $result['day'] ;
+          foreach($data['task_list'] as $task){
+            $row_data[] =$result['data'][$task->id]['count'] ;
+            $row_data[] =$result['data'][$task->id]['amount'] ;
+          }
+          $row_data[] = $result['summary_count'] ;
+          $row_data[] = $result['summary_amount'] ;
+          $sheet->row($row_index,$row_data);
+          $row_index++ ;
+        }
+
+         // Last row
+
+        $last_row = [] ;
+        $last_row[] = 'รวม' ;
+        foreach($data['task_list'] as $task ){
+          $last_row[] = $data['summary_by_task'][$task->id]['count'];
+          $last_row[] = $data['summary_by_task'][$task->id]['amount'];
+        }
+        $last_row[] = $data['summary_by_task']['all_count'];
+        $last_row[] = $data['summary_by_task']['all_amount'];
+
+        $sheet->row($row_index,$last_row);
+
+        $sheet->cells('B'.$row_index.':W'.$row_index, function($cells) {
+          $cells->setAlignment('right');
+          $cells->setFontWeight('bold');
+        });
+
+        $sheet->cell('A'.$row_index, function($cell) {
+          $cell->setFontWeight('bold');
+        });
+
+        $sheet->setHeight(1, 20);
+        $sheet->setHeight(2, 20);
+        for($i = 4 ; $i <= $row_index ; $i++){
+          $sheet->setHeight($i, 20);
+          foreach($all_cols as $col){
+            $sheet->setBorder($col.$i, 'thin');
+          }
+        }
+
+      })->export('xls');
+    });
   }
 
   private function processAll2($monthly_select_id){
