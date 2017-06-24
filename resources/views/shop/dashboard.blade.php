@@ -17,6 +17,13 @@
     <div class="caption">
       <i class="icon-list font-green"></i>
       <span class="caption-subject font-green sbold uppercase"> {{ trans('breadcrumb.dashboard-daily-income') }} </span>
+
+      {{$start_date}} - {{$to_date}}
+    </div>
+    <div class="actions">
+      <form method="GET" class="form-horizontal" role="form" action="{{ url($shop_url) }}">
+        {{ Form::select('monthly_select_id', $monthly_selector , $monthly_select_id , ['class' => 'form-control' ,'name' => 'monthly_select_id']) }}
+      </form>
     </div>
   </div>
   <div class="portlet-body">
@@ -38,6 +45,12 @@
       xkey: 'date',
       ykeys: ['total'],
       labels: ['Total']
+    });
+
+    jQuery(document).ready(function() {
+      $('select[name="monthly_select_id"]').change(function(e) {
+        $(this).parents('form:first').submit();
+      });
     });
 
   </script>
