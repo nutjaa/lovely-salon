@@ -9,5 +9,7 @@ return [
 	'monthly-summary-all2' => 'ใบรายงานพนักงาน(ช่างสระไดร์)ประจำเดือน',
 	'monthly-summary-single2' => 'ใบรายงานพนักงาน(ช่างสระไดร์)ประจำเดือน',
 	'monthly-salary' => 'ตารางสรุปเงินเดือน',
-	'monthly-fine' => 'ตารางค่าปรับรายเดือน'
+	'monthly-fine' => 'ตารางค่าปรับรายเดือน',
+	'dashboard' => 'Dashboard',
+	'dashboard-daily-income' => 'รายรับรายวัน'
 ];
