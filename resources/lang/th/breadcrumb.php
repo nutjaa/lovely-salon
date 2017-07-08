@@ -12,5 +12,6 @@ return [
 	'monthly-fine' => 'ตารางค่าปรับรายเดือน',
 	'dashboard' => 'Dashboard',
 	'dashboard-daily-income' => 'รายรับรายวัน',
-	'profile' => 'โปรไฟล์'
+	'profile' => 'โปรไฟล์',
+	'change-password' => 'เปลี่ยนรหัสผ่าน'
 ];

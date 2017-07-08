@@ -75,7 +75,11 @@
                             <li>
                                 <a href="{{ url('/profile') }}">
                                     <i class="icon-user"></i> {{ trans('header.my-profile') }}
-                                    <span class="badge badge-danger">1</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/change-password') }}">
+                                    <i class="icon-user"></i> {{ trans('header.change-password') }}
                                 </a>
                             </li>
                             <li>

@@ -18,8 +18,13 @@ Route::get('/logout', 'Auth\LoginController@logout');
 
 Route::group(['middleware' => ['auth']], function () {
 	Route::resource('shops', 'CompanyController');
+
 	Route::get('/profile','ProfileController@show');
 	Route::put('/profile/{id}','ProfileController@update');
+
+	Route::get('/change-password','PasswordController@show');
+	Route::put('/change-password/{id}','PasswordController@update');
+
 	Route::group([ 'prefix' => '{shop_url}' ], function () {
 		Route::get('/', 'Shop\DashboardController@index');
 		Route::resource('employees', 'Shop\EmployeeController');
