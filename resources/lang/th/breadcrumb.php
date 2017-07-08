@@ -11,5 +11,6 @@ return [
 	'monthly-salary' => 'ตารางสรุปเงินเดือน',
 	'monthly-fine' => 'ตารางค่าปรับรายเดือน',
 	'dashboard' => 'Dashboard',
-	'dashboard-daily-income' => 'รายรับรายวัน'
+	'dashboard-daily-income' => 'รายรับรายวัน',
+	'profile' => 'โปรไฟล์'
 ];

@@ -73,7 +73,7 @@
                             <img src="/assets/layouts/layout6/img/avatar1.jpg" alt=""> </button>
                         <ul class="dropdown-menu-v2" role="menu">
                             <li>
-                                <a href="/">
+                                <a href="{{ url('/profile') }}">
                                     <i class="icon-user"></i> {{ trans('header.my-profile') }}
                                     <span class="badge badge-danger">1</span>
                                 </a>
