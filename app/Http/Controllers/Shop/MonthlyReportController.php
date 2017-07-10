@@ -440,9 +440,6 @@ class MonthlyReportController extends Controller{
     $end_date = Carbon::createFromFormat('Y-m-d H',$monthly_select_id . ' 0');
     $end_date->addMonth();
 
-    $start_date->setTimezone('Asia/Bangkok');
-    $end_date->setTimezone('Asia/Bangkok');
-
     $daily_jobs = DailyJob::where('task_at','>',$start_date)->where('task_at','<',$end_date)->whereIn('employee_id',$employee_ids)->whereIn('task_id',explode(',', $task->name))->orderBy('task_at','ASC')->orderBy('id', 'ASC')->get();
 
     $results = array();
