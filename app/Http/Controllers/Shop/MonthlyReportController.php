@@ -485,9 +485,9 @@ class MonthlyReportController extends Controller{
     }
 
     foreach($results as $result){
-      foreach($result['data'] as $task_id => $value){
-        $summary_by_task[$task_id] += $value['percent'];
-        $summary_by_task['all'] += $value['percent'];
+      foreach($result['data'] as $task_id => $value1){
+        $summary_by_task[$task_id] += $value1['percent'];
+        $summary_by_task['all'] += $value1['percent'];
       }
     }
 
