@@ -110,7 +110,7 @@ class DailyJobController extends Controller{
 
 
   	$this->validate($request, [
-        'employee_id' => 'required',
+        'employee_id' => 'required|exists:employees,id',
         'task_id' => 'required'
     ]);
 
@@ -176,7 +176,7 @@ class DailyJobController extends Controller{
     $daily_job = DailyJob::where('id',$id)->first();
 
     $this->validate($request, [
-        'employee_id' => 'required',
+        'employee_id' => 'required|exists:employees,id',
         'task_id' => 'required'
     ]);
 
